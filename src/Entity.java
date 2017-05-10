@@ -1,4 +1,4 @@
 
-public class Entity {
+abstract public class Entity {
 
 }

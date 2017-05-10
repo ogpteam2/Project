@@ -1,4 +1,4 @@
 
-public class Mobile extends Entity {
+abstract public class Mobile extends Entity {
 
 }

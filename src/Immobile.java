@@ -1,4 +1,4 @@
 
-public class Immobile extends Entity {
+abstract public class Immobile extends Entity {
 
 }
