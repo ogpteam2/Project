@@ -1,5 +1,5 @@
 package rpg;
 
-public class Weapon extends Immobile {
+public class Weapon extends Item {
 
 }
