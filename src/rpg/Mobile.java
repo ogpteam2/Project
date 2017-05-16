@@ -1,5 +1,7 @@
 package rpg;
 
+import java.util.regex.Pattern;
+
 import be.kuleuven.cs.som.annotate.*;
 
 abstract public class Mobile extends Entity {
@@ -13,6 +15,8 @@ abstract public class Mobile extends Entity {
 	
 	private String name = null;
 	
+	protected abstract Pattern getValidNamePattern();
+	
 	/**
 	 * Checks if the given string is a valid name for the mobile.
 	 * 
@@ -20,7 +24,10 @@ abstract public class Mobile extends Entity {
 	 *  be defined per subclass.
 	 */
 	
-	public abstract boolean isValidName(String name);
+	public boolean isValidName(String name){
+		Pattern validNamePattern = this.getValidNamePattern();
+		return validNamePattern.matcher(name).matches();
+	}
 	
 	@Basic
 	@Raw
