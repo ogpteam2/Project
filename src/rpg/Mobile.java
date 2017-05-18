@@ -1,12 +1,22 @@
 package rpg;
 
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 import be.kuleuven.cs.som.annotate.*;
 
-abstract public class Mobile extends Entity {
+abstract public class Mobile {
+	
 	/************************************************
-	 * Naam
+	 * Constructors
+	 ************************************************/
+	
+	public Mobile(String name) throws IllegalArgumentException{
+		setName(name);
+	}
+	
+	
+	/************************************************
+	 * Name
 	 ************************************************/
 	
 	/**
@@ -15,7 +25,9 @@ abstract public class Mobile extends Entity {
 	
 	private String name = null;
 	
-	protected abstract Pattern getValidNamePattern();
+	public Pattern getValidNamePattern(){
+		return Pattern.compile(".");
+	}
 	
 	/**
 	 * Checks if the given string is a valid name for the mobile.
@@ -34,9 +46,13 @@ abstract public class Mobile extends Entity {
 	public String getName(){
 		return this.name;
 	}
-	
+
 	public void setName(String name) throws IllegalArgumentException{
-		if(isValidName(name)) this.name = name;
-		else throw new IllegalArgumentException("Invalid name");
+		if(isValidName(name)){
+			this.name = name;
+		}
+		else{
+			throw new IllegalArgumentException("Invalid name");
+		}
 	}
 }
