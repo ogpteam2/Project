@@ -6,19 +6,19 @@ import be.kuleuven.cs.som.annotate.Raw;
 abstract public class Item {
 	
 	public Item(){
-		generateID();
+		ID = generateID();
 	}
 	
 	/************************************************
 	 * Identifier
 	 ************************************************/
 	
-	private final int ID;
+	private final long ID;
 	
 	/**
 	 * Generates an ID in accordance with the item type's ID spec.
 	 */
-	protected abstract void generateID();
+	protected abstract long generateID();
 	
 	/**
 	 * Returns the item ID.
@@ -26,14 +26,8 @@ abstract public class Item {
 	 */
 	@Raw
 	@Basic
-	public int getID(){
+	public long getID(){
 		return this.ID;
-	}
-	
-	@Raw
-	@Basic
-	protected void setID(int ID){
-		this.ID = ID;
 	}
 	
 	/************************************************
