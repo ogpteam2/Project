@@ -2,8 +2,6 @@ package rpg.utility;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,21 +16,32 @@ public class BinomialIteratorTest {
 
 	@Test
 	public void binomialCorrectnessTest() {
-		int length = 50;
+		int length = 20;
 		long [] pyramidBinomial = new long[length];
 		long [] factorialBinomial = new long[length];
 		for(int i = 0; i < length; i++){
 			pyramidBinomial[i] = it.nextLong();
 			factorialBinomial[i] = calculateBinomial(i+1);
 		}
-		System.out.println(Arrays.toString(pyramidBinomial));
-		System.out.println(Arrays.toString(factorialBinomial));
 		assertArrayEquals(factorialBinomial,pyramidBinomial);
 	}
 	
 	@Test
 	public void test(){
 		assertEquals(calculateBinomial(2),4L);
+	}
+	
+	@Test
+	public void testReset(){
+		it.reset();
+		assertEquals(2L,it.nextLong());
+		assertEquals(4L,it.nextLong());
+	}
+	
+	@Test
+	public void pushMethod(){
+		while(it.nextLong() > 0);
+		System.out.println(it.getCurrentRowNum());
 	}
 	
 	public long calculateBinomial(int n){

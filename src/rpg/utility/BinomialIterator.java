@@ -10,7 +10,13 @@ public class BinomialIterator implements PrimitiveIterator.OfLong {
 
 	private ArrayList<Long> pyramidRow;
 	
-	private long current;
+	private long currentValue;
+	private int currentRowNum;
+	
+	/**
+	 * An iterator that calculates sequential binomial coefficients. These can be calculated as specified
+	 * by the assignment with factorials. However, factorials generate insanely large 
+	 */
 	
 	public BinomialIterator(){
 		reset();
@@ -33,31 +39,30 @@ public class BinomialIterator implements PrimitiveIterator.OfLong {
 	}
 
 	/**
-	 * Advances the iterator. First calculates the row sum of the current pyramid row. Then stores that value in current. 
-	 * Finally replaces the row that was used to calculate with a new row, so the next iteration can calculate using that.
+	 * Advances the iterator. First calculates the next row in the pyramid. Then calculates the sum of 
 	 * @Effect attribute current is updated with the next binomial coefficient
 	 * @Effect the pyramidRow is replaced by the value that will be used to calculate the binomialcoefficient of the following iteration
+	 * @Effect Advances the row number by one.
 	 * @return the next binomial coefficient
 	 */
 	
 	@Override
 	public long nextLong() {
-		long nextLong = calculateRowSum(pyramidRow);
-		setCurrent(nextLong);
 		replaceRow(calculateNextRow());
+		advanceCurrentRowNum();
+		long nextLong = calculateRowSum(pyramidRow);
+		setCurrentValue(nextLong);
 		return nextLong;
 	}
 	
 	/**
 	 * Resets the iterator to the first binomial coefficient.
-	 * @effect pyramidRow is reset to the basic row of [1,1]
+	 * @effect the pyramidrow is re-initialised to an empty arraylist
+	 * @effect the pyramid row number is set to 1
 	 */
 	public void reset(){
-		ArrayList<Long> nextRow = new ArrayList<Long>();
-		nextRow.add(1L);
-		nextRow.add(1L);
-		setCurrent(2L);
-		replaceRow(nextRow);
+		replaceRow(new ArrayList<Long>());
+		setCurrentRowNum(1);
 	}
 	
 	private ArrayList<Long> calculateNextRow(){
@@ -90,12 +95,39 @@ public class BinomialIterator implements PrimitiveIterator.OfLong {
 
 	@Basic
 	@Raw
-	public long getCurrent() {
-		return current;
+	public long getCurrentValue() {
+		return currentValue;
 	}
 
+	
+	private void setCurrentValue(long currentValue) {
+		this.currentValue = currentValue;
+	}
+	
+	/**
+	 * Returns the current row number.
+	 * @return the current row number.
+	 */
+	@Raw
 	@Basic
-	private void setCurrent(long current) {
-		this.current = current;
+	public int getCurrentRowNum() {
+		return currentRowNum;
+	}
+	
+	
+	/**
+	 * The value of the current row number is directly set
+	 * @param currentRowNum value to set the row number to
+	 */
+	private void setCurrentRowNum(int currentRowNum){
+		this.currentRowNum = currentRowNum;
+	}
+	
+	/**
+	 * Advances the row counter by one
+	 * @effect one is added to the currentRowNum
+	 */
+	private void advanceCurrentRowNum(){
+		this.currentRowNum++;
 	}
 }
