@@ -13,7 +13,7 @@ abstract public class Item {
 	 * Identifier
 	 ************************************************/
 	
-	private final long ID;
+	protected final long ID;
 	
 	/**
 	 * Generates an ID in accordance with the item type's ID spec.
