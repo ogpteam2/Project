@@ -1,30 +1,21 @@
 package rpg;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Raw;
-import rpg.utility.BinomialIterator;
+import rpg.utility.BinomialGenerator;
 
 public class Backpack extends Item {
 
-	private static BinomialIterator idGenerator = new BinomialIterator();
-	private final long ID;
+	private static BinomialGenerator idGenerator = new BinomialGenerator();
 	
 	public Backpack(){
-		this.ID = generateID();
+		
 	}
 	
 	@Override
 	protected long generateID() {
-		if(!idGenerator.hasNext()){
+		if(!idGenerator.hasNextID()){
 			idGenerator.reset(); 
 		}
-		return idGenerator.nextLong();
-	}
-	
-	@Basic
-	@Raw
-	public long getID(){
-		return this.ID;
+		return idGenerator.nextID();
 	}
 
 }

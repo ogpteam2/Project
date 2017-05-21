@@ -1,14 +1,13 @@
 package rpg;
 
-import rpg.utility.PrimeIterator;
+import rpg.utility.PrimeGenerator;
 
 public class Armor extends Item {
 	
-	private static PrimeIterator idGenerator = new PrimeIterator();
-	private final long ID;
+	private static PrimeGenerator idGenerator = new PrimeGenerator();
 	
 	public Armor(){
-		ID = generateID();
+		
 	}
 	
 	/**
@@ -17,15 +16,7 @@ public class Armor extends Item {
 	 */
 	@Override
 	protected long generateID() {
-		return idGenerator.nextLong();
-	}
-	
-	/**
-	 * Returns the ID of this piece of armor.
-	 * @return armor ID
-	 */
-	public long getID(){
-		return this.ID;
+		return idGenerator.nextID();
 	}
 
 }
