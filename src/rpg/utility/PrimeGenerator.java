@@ -1,9 +1,8 @@
 package rpg.utility;
 
 import java.util.ArrayList;
-import java.util.PrimitiveIterator;
 
-public class PrimeIterator implements PrimitiveIterator.OfLong {
+public class PrimeGenerator implements IDGenerator {
 	
 	private int position;
 	
@@ -13,7 +12,7 @@ public class PrimeIterator implements PrimitiveIterator.OfLong {
 	 * Iterator that generates consecutive primes.
 	 */
 	
-	public PrimeIterator(){
+	public PrimeGenerator(){
 		position = -1;
 		primeList.add(2L);
 	}
@@ -24,13 +23,13 @@ public class PrimeIterator implements PrimitiveIterator.OfLong {
 	 */
 	
 	@Override
-	public boolean hasNext() {
+	public boolean hasNextID() {
 		return true;
 	}
 	
 	
 	@Override
-	public long nextLong() {
+	public long nextID() {
 		position++;
 		try{
 			return primeList.get(position);

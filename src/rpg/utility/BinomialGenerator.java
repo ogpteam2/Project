@@ -1,12 +1,11 @@
 package rpg.utility;
 
 import java.util.ArrayList;
-import java.util.PrimitiveIterator;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
-public class BinomialIterator implements PrimitiveIterator.OfLong {
+public class BinomialGenerator implements IDGenerator {
 
 	private ArrayList<Long> pyramidRow;
 	
@@ -18,7 +17,7 @@ public class BinomialIterator implements PrimitiveIterator.OfLong {
 	 * by the assignment with factorials. However, factorials generate insanely large 
 	 */
 	
-	public BinomialIterator(){
+	public BinomialGenerator(){
 		reset();
 	}
 	
@@ -32,7 +31,7 @@ public class BinomialIterator implements PrimitiveIterator.OfLong {
 	 * 			| else return true
 	 */
 	@Override
-	public boolean hasNext() {
+	public boolean hasNextID() {
 		long nextValue = calculateRowSum(pyramidRow);
 		if(nextValue < 0) return false;
 		else return true;
@@ -47,7 +46,7 @@ public class BinomialIterator implements PrimitiveIterator.OfLong {
 	 */
 	
 	@Override
-	public long nextLong() {
+	public long nextID() {
 		replaceRow(calculateNextRow());
 		advanceCurrentRowNum();
 		long nextLong = calculateRowSum(pyramidRow);
