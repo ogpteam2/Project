@@ -7,11 +7,11 @@ import org.junit.Test;
 
 public class BinomialIteratorTest {
 
-	BinomialIterator it;
+	BinomialGenerator it;
 	
 	@Before
 	public void setUp(){
-		it = new BinomialIterator();
+		it = new BinomialGenerator();
 	}
 
 	@Test
@@ -20,7 +20,7 @@ public class BinomialIteratorTest {
 		long [] pyramidBinomial = new long[length];
 		long [] factorialBinomial = new long[length];
 		for(int i = 0; i < length; i++){
-			pyramidBinomial[i] = it.nextLong();
+			pyramidBinomial[i] = it.nextID();
 			factorialBinomial[i] = calculateBinomial(i+1);
 		}
 		assertArrayEquals(factorialBinomial,pyramidBinomial);
@@ -34,13 +34,13 @@ public class BinomialIteratorTest {
 	@Test
 	public void testReset(){
 		it.reset();
-		assertEquals(2L,it.nextLong());
-		assertEquals(4L,it.nextLong());
+		assertEquals(2L,it.nextID());
+		assertEquals(4L,it.nextID());
 	}
 	
 	@Test
 	public void pushMethod(){
-		while(it.nextLong() > 0);
+		while(it.nextID() > 0);
 		System.out.println(it.getCurrentRowNum());
 	}
 	
