@@ -2,7 +2,7 @@ package rpg;
 
 import rpg.utility.BinomialGenerator;
 
-public class Backpack extends Item {
+public class Backpack extends Container {
 
 	private static BinomialGenerator idGenerator = new BinomialGenerator();
 	

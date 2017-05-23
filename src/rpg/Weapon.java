@@ -1,6 +1,6 @@
 package rpg;
 
-public class Weapon extends Item {
+public class Weapon extends Immobile {
 	
 	private static long idCounter = 0;
 	

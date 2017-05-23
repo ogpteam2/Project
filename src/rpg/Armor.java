@@ -2,7 +2,7 @@ package rpg;
 
 import rpg.utility.PrimeGenerator;
 
-public class Armor extends Item {
+public class Armor extends Immobile {
 	
 	private static PrimeGenerator idGenerator = new PrimeGenerator();
 	
