@@ -1,4 +1,4 @@
-package rpg;
+package rpg.inventory;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;

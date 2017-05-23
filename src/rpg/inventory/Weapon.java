@@ -1,4 +1,4 @@
-package rpg;
+package rpg.inventory;
 
 public class Weapon extends Immobile {
 	

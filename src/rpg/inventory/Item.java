@@ -1,4 +1,4 @@
-package rpg;
+package rpg.inventory;
 
 public abstract class Item extends Immobile{
 	

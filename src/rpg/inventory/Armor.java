@@ -1,4 +1,4 @@
-package rpg;
+package rpg.inventory;
 
 import rpg.utility.PrimeGenerator;
 
