@@ -3,8 +3,21 @@ package rpg.inventory;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
+import rpg.utility.IDGenerator;
 
 abstract public class Immobile {
+	
+	private static IDGenerator idGenerator = new IDGenerator(){
+		public boolean hasNextID(){
+			return true;
+		}
+		public long nextID(){
+			return 1;
+		}
+		public void reset(){
+			
+		}
+	};
 	
 	public Immobile(double weight){
 		ID = generateID();
@@ -19,12 +32,14 @@ abstract public class Immobile {
 	 * Identifier
 	 ************************************************/
 	
-	protected final long ID;
+	private final long ID;
 	
 	/**
 	 * Generates an ID in accordance with the item type's ID spec.
 	 */
-	protected abstract long generateID();
+	private long generateID(){
+		return this.idGenerator.nextID();
+	}
 	
 	/**
 	 * Returns the item ID.
