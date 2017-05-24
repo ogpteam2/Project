@@ -39,9 +39,11 @@ public class PrimeGenerator implements IDGenerator {
 	@Override
 	public long nextID() {
 		position++;
-		try{
-			return primeList.get(position);
-		} catch(IndexOutOfBoundsException e){
+		return getPrime(position);
+	}
+	
+	private long getPrime(int position){
+		while(position>primeList.size()+1){
 			primeList.add(generateNextPrime(primeList));
 		}
 		return primeList.get(position);
@@ -70,6 +72,7 @@ public class PrimeGenerator implements IDGenerator {
 	}
 	
 	public boolean isPrime(long number){
+		System.out.println(position);
 		while(number > primeList.get((position))){
 			nextID();
 		}
