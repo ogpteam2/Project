@@ -7,18 +7,6 @@ import rpg.utility.IDGenerator;
 
 abstract public class Immobile {
 	
-	private static IDGenerator idGenerator = new IDGenerator(){
-		public boolean hasNextID(){
-			return true;
-		}
-		public long nextID(){
-			return 1;
-		}
-		public void reset(){
-			
-		}
-	};
-	
 	public Immobile(double weight){
 		ID = generateID();
 		if(isValidWeight(weight)){
@@ -37,9 +25,7 @@ abstract public class Immobile {
 	/**
 	 * Generates an ID in accordance with the item type's ID spec.
 	 */
-	private long generateID(){
-		return this.idGenerator.nextID();
-	}
+	public abstract long generateID();
 	
 	/**
 	 * Returns the item ID.

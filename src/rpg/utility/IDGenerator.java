@@ -19,4 +19,6 @@ public interface IDGenerator {
 	 * an ID as if the generator was just initialised.
 	 */
 	public void reset();
+	
+	public long generateID();
 }

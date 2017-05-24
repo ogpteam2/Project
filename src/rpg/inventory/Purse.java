@@ -1,16 +1,19 @@
 package rpg.inventory;
 
-public class Purse extends Container {
+import rpg.utility.FibonacciGenerator;
 
+public class Purse extends Container {
+	
+	private static FibonacciGenerator idGenerator = new FibonacciGenerator();
+	
 	public Purse(float weight) {
 		super(weight);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	protected long generateID() {
-		// TODO Auto-generated method stub
-		return 0;
+	public long generateID() {
+		return idGenerator.generateID();
 	}
 
 	@Override

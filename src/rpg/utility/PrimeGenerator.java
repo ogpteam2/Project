@@ -17,6 +17,14 @@ public class PrimeGenerator implements IDGenerator {
 		primeList.add(2L);
 	}
 	
+	@Override
+	public long generateID(){
+		if(!hasNextID()){
+			reset();
+		}
+		return nextID();
+	}
+	
 	/**
 	 * There are an infinite amount of prime numbers, so in theory this method should always be true.
 	 * Java's long primitive does have a finite size though, so 

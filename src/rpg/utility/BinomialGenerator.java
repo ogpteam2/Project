@@ -21,6 +21,13 @@ public class BinomialGenerator implements IDGenerator {
 		reset();
 	}
 	
+	public long generateID(){
+		if(!hasNextID()){
+			reset();
+		}
+		return nextID();
+	}
+	
 	/**
 	 * Binomial coefficients can be calculated endlessly. However, the java long type has a finite size.
 	 * When the value of a long grows larger than 2^63 the sign indication bit is flipped, so the value

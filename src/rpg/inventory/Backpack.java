@@ -11,11 +11,8 @@ public class Backpack extends Container {
 	}
 	
 	@Override
-	protected long generateID() {
-		if(!idGenerator.hasNextID()){
-			idGenerator.reset(); 
-		}
-		return idGenerator.nextID();
+	public long generateID() {
+		return idGenerator.generateID();
 	}
 
 	@Override

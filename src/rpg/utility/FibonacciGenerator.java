@@ -36,4 +36,12 @@ public class FibonacciGenerator implements IDGenerator {
 		secondNumber = 0;
 	}
 
+	@Override
+	public long generateID(){
+		if(!hasNextID()){
+			reset();
+		}
+		return nextID();
+	}
+
 }

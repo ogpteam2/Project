@@ -15,6 +15,14 @@ public class WeaponIDGenerator implements IDGenerator {
 		reset();
 	}
 	
+	@Override
+	public long generateID(){
+		if(!hasNextID()){
+			reset();
+		}
+		return nextID();
+	}
+	
 	/**
 	 * Calculates an ID that is a multiple of six.
 	 * @return next ID in the sequence.

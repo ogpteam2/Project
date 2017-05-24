@@ -15,8 +15,8 @@ public class Armor extends Immobile {
 	 * @return ID for the armor
 	 */
 	@Override
-	protected long generateID() {
-		return idGenerator.nextID();
+	public long generateID() {
+		return idGenerator.generateID();
 	}
 
 }

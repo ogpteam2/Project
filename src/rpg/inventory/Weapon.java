@@ -1,19 +1,19 @@
 package rpg.inventory;
 
+import rpg.utility.WeaponIDGenerator;
+
 public class Weapon extends Immobile {
+	
+	private static WeaponIDGenerator idGenerator = new WeaponIDGenerator();
 	
 	public Weapon(double weight) {
 		super(weight);
 		// TODO Auto-generated constructor stub
 	}
 
-	private static long idCounter = 0;
-	
 	@Override
-	protected long generateID() {
-		return (idCounter++) * 3;
+	public long generateID() {
+		return idGenerator.generateID();
 	}
-	
-	
 
 }
