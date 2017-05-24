@@ -6,8 +6,8 @@ public class Backpack extends Container {
 
 	private static BinomialGenerator idGenerator = new BinomialGenerator();
 	
-	public Backpack(){
-		
+	public Backpack(double weight){
+		super(weight);
 	}
 	
 	@Override
@@ -16,6 +16,12 @@ public class Backpack extends Container {
 			idGenerator.reset(); 
 		}
 		return idGenerator.nextID();
+	}
+
+	@Override
+	public double getWeightOfContents() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

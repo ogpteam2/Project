@@ -6,8 +6,8 @@ public class Armor extends Immobile {
 	
 	private static PrimeGenerator idGenerator = new PrimeGenerator();
 	
-	public Armor(){
-		
+	public Armor(float weight){
+		super(weight);
 	}
 	
 	/**

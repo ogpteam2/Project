@@ -1,12 +1,18 @@
 package rpg.inventory;
 
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 
 abstract public class Immobile {
 	
-	public Immobile(){
+	public Immobile(double weight){
 		ID = generateID();
+		if(isValidWeight(weight)){
+			this.weight = weight;
+		} else {
+			this.weight = 0;
+		}
 	}
 	
 	/************************************************
@@ -35,5 +41,22 @@ abstract public class Immobile {
 	 ************************************************/
 	
 	private int value;
+	
+	/************************************************
+	 * Weight
+	 ************************************************/
+	
+	private final double weight;
+	
+	@Raw
+	@Immutable
+	public double getWeight(){
+		return this.weight;
+	}
+	
+	public boolean isValidWeight(double weight){
+		return weight >= 0;
+	}
+	
 	
 }
