@@ -12,5 +12,7 @@ public abstract class Container extends Immobile{
 	}
 	
 	public abstract double getWeightOfContents();
+	
+	public abstract boolean canHaveAsContent(Immobile item);
 
 }
