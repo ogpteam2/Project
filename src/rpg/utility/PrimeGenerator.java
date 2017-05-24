@@ -68,4 +68,24 @@ public class PrimeGenerator implements IDGenerator {
 			return current;
 		}
 	}
+	
+	public boolean isPrime(long number){
+		while(number > primeList.get((position))){
+			nextID();
+		}
+		return primeList.contains(number);
+	}
+	
+	public long closestPrime(long number){
+		if(isPrime(number)) return number;
+		else{
+			int i = 0;
+			while(primeList.get(i) < number){
+				i++;
+			}
+			long lower = primeList.get(i - 1);
+			long higher = primeList.get(i);
+			return ((number - lower) > (higher - number)) ? higher : lower;
+		}
+	}
 }
