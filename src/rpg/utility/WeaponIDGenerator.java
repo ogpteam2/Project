@@ -8,7 +8,7 @@ public class WeaponIDGenerator implements IDGenerator {
 	 * An IDGenerator that generates multiples of six to be used as id for the weapon class.
 	 * With the ID being a multiple of 6 we are certain it is even, aka a multiple of 2, and a multiple of three.
 	 * @invar the generated ID will always be even and a multiple of three.
-	 * 		| id = n * 3 * 2
+	 * 		| (ID%6 == 0)
 	 */
 	
 	public WeaponIDGenerator() {

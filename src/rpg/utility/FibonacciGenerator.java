@@ -8,7 +8,7 @@ public class FibonacciGenerator implements IDGenerator {
 	public FibonacciGenerator(){
 		reset();
 	}
-	// zouden we niet beter BigInterger gebruiken?
+	
 	@Override
 	public long nextID() {
 		if(firstNumber == 0){
