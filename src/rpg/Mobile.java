@@ -100,9 +100,50 @@ abstract public class Mobile {
 	 * Hitpoints - nominal programming
 	 ************************************************/
 	
+	/**
+	 * Gives the current hitpoints.
+	 */
+	@Raw @Basic
+	public long getCurrentHitpoints(){
+		return this.currentHitpoints;
+	}
 	
+	/**
+	 * Gives the maximum hitpoints.
+	 */
+	@Raw @Basic
+	public long getMaximumHitpoints(){
+		return this.maximumHitpoints;
+	}
 	
+	/**
+	 * Sets the current hitpoints to a given amount.
+	 * 
+	 * @param amount
+	 * 		  The new name for the currentHitpoints.
+	 * @Post If the amount is not negative the currentHitpoints is set
+	 * 		 to the given amount.
+	 * 		 | if (amount>=0)
+	 * 		 | then new.getCurrentHitpoints().equals(amount)
+	 */
+	public void setCurrentHitpoints(long amount){
+		if (amount >= 0){
+			this.currentHitpoints = amount;
+		}
+	}
 	
+	/**
+	 * Sets the maximumHitpoints to a given amount.
+	 * 
+	 * @param amount
+	 * 		  The new name for the currentHitpoints.
+	 * @Post 
+	 */
+	public void setMaximumtHitpoints(long amount){
+		if (amount>1){
+			
+		}
+	}
 	
 	
 	/**
@@ -112,7 +153,7 @@ abstract public class Mobile {
 	/**
 	 * A variable that stores the maximum hitpoints of the mobile.
 	 */
-	private long MaximumHitpoints;
+	private long maximumHitpoints;
 	
 	
 	
