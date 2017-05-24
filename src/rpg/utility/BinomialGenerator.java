@@ -124,7 +124,7 @@ public class BinomialGenerator implements IDGenerator {
 	
 	/**
 	 * Advances the row counter by one
-	 * @effect one is added to the currentRowNum
+	 * @Post one is added to the currentRowNum
 	 */
 	private void advanceCurrentRowNum(){
 		this.currentRowNum++;
