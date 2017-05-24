@@ -95,4 +95,26 @@ abstract public class Mobile {
 	 * Variable for storing the pattern to which names should abide by.
 	 */
 	private static final Pattern validNamePattern = Pattern.compile(".+");
+	
+	/************************************************
+	 * Hitpoints - nominal programming
+	 ************************************************/
+	
+	
+	
+	
+	
+	
+	/**
+	 * A variable that stores the current hitpoints of the mobile.
+	 */
+	private long currentHitpoints;
+	/**
+	 * A variable that stores the maximum hitpoints of the mobile.
+	 */
+	private long MaximumHitpoints;
+	
+	
+	
+	
 }
