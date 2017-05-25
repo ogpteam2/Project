@@ -1,8 +1,8 @@
 package rpg.inventory;
 
-public abstract class Item extends Immobile{
+public abstract class Gear extends Item{
 	
-	public Item(float weight, double value){
+	public Gear(float weight, double value){
 		super(weight);
 	}
 	
