@@ -1,8 +1,9 @@
 package rpg.inventory;
 
+import rpg.utility.IDGenerator;
 import rpg.utility.PrimeGenerator;
 
-public class Armor extends Immobile {
+public class Armor extends Item {
 	
 	private static PrimeGenerator idGenerator = new PrimeGenerator();
 	
@@ -10,13 +11,7 @@ public class Armor extends Immobile {
 		super(weight);
 	}
 	
-	/**
-	 * Generates an ID for the piece of armor
-	 * @return ID for the armor
-	 */
-	@Override
-	public long generateID() {
-		return idGenerator.generateID();
+	protected IDGenerator getIDGenerator(){
+		return idGenerator;
 	}
-
 }

@@ -1,8 +1,9 @@
 package rpg.inventory;
 
+import rpg.utility.IDGenerator;
 import rpg.utility.WeaponIDGenerator;
 
-public class Weapon extends Immobile {
+public class Weapon extends Item {
 	
 	private static WeaponIDGenerator idGenerator = new WeaponIDGenerator();
 	
@@ -11,9 +12,7 @@ public class Weapon extends Immobile {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public long generateID() {
-		return idGenerator.generateID();
+	protected IDGenerator getIDGenerator(){
+		return idGenerator;
 	}
-
 }
