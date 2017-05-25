@@ -1,6 +1,6 @@
 package rpg.inventory;
 
-public abstract class Container extends Immobile{
+public abstract class Container extends Item{
 
 	public Container(double weight) {
 		super(weight);
@@ -13,6 +13,9 @@ public abstract class Container extends Immobile{
 	
 	public abstract double getWeightOfContents();
 	
-	public abstract boolean canHaveAsContent(Immobile item);
+	public abstract boolean canHaveAsContent(Item item);
+	
+	private DucatAmount ducatContent;
 
+	public abstract void addToContents(DucatAmount ducatAmount);
 }

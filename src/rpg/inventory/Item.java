@@ -5,9 +5,9 @@ import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 import rpg.utility.IDGenerator;
 
-abstract public class Immobile {
+abstract public class Item {
 	
-	public Immobile(double weight){
+	public Item(double weight){
 		ID = generateID();
 		if(isValidWeight(weight)){
 			this.weight = weight;
@@ -23,9 +23,17 @@ abstract public class Immobile {
 	private final long ID;
 	
 	/**
+	 * Get the static 
+	 * @return
+	 */
+	protected abstract IDGenerator getIDGenerator();
+	
+	/**
 	 * Generates an ID in accordance with the item type's ID spec.
 	 */
-	public abstract long generateID();
+	private long generateID(){
+		return getIDGenerator().generateID();
+	}
 	
 	/**
 	 * Returns the item ID.
@@ -41,7 +49,7 @@ abstract public class Immobile {
 	 * Value
 	 ************************************************/
 	
-	private int value;
+	private DucatAmount value;
 	
 	/************************************************
 	 * Weight
@@ -59,5 +67,19 @@ abstract public class Immobile {
 		return weight >= 0;
 	}
 	
+	
+	/************************************************
+	 * Owner
+	 ************************************************/
+	
+	private Container container = null;
+	
+	public void setContainer(Container container){
+		
+	}
+	
+	public Container getContainer(){
+		return this.container;
+	}
 	
 }
