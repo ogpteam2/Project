@@ -13,7 +13,7 @@ public class PrimeGenerator implements IDGenerator {
 	 */
 	
 	public PrimeGenerator(){
-		position = -1;
+		position = 0;
 		primeList.add(2L);
 	}
 	
@@ -39,11 +39,11 @@ public class PrimeGenerator implements IDGenerator {
 	@Override
 	public long nextID() {
 		position++;
-		return getPrime(position);
+		return getPrime(position - 1);
 	}
 	
-	private long getPrime(int position){
-		while(position>primeList.size()+1){
+	public long getPrime(int position){
+		while(position > primeList.size() - 1){
 			primeList.add(generateNextPrime(primeList));
 		}
 		return primeList.get(position);
@@ -59,6 +59,13 @@ public class PrimeGenerator implements IDGenerator {
 		this.position = 0;
 	}
 	
+	/**
+	 * Generates the smallest prime larger than all primes in the given array.
+	 * @param previousPrimes
+	 * 			Array with a list of primes to check candidate primes against.
+	 * @pre previousPrimes has to be a complete list of primes. 
+	 * @return the next prime
+	 */
 	private long generateNextPrime(ArrayList<Long> previousPrimes){
 		long current = previousPrimes.get(previousPrimes.size()-1);
 		SEARCH:
@@ -72,8 +79,9 @@ public class PrimeGenerator implements IDGenerator {
 	}
 	
 	public boolean isPrime(long number){
-		System.out.println(position);
-		while(number > primeList.get((position))){
+		System.out.println(number > primeList.get(position));
+		System.out.println(nextID());
+		while(number > getPrime(position)){
 			nextID();
 		}
 		return primeList.contains(number);
@@ -83,11 +91,11 @@ public class PrimeGenerator implements IDGenerator {
 		if(isPrime(number)) return number;
 		else{
 			int i = 0;
-			while(primeList.get(i) < number){
+			while(getPrime(i) < number){
 				i++;
 			}
-			long lower = primeList.get(i - 1);
-			long higher = primeList.get(i);
+			long lower = getPrime(i - 1);
+			long higher = getPrime(i);
 			return ((number - lower) > (higher - number)) ? higher : lower;
 		}
 	}

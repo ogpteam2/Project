@@ -20,6 +20,7 @@ public class PrimeGeneratorTest {
 
 	@Test
 	public void firstElementsCheck() {
+		gen.reset();
 		for(int i = 0; i < littlePrimeList.length; i++){
 			generatedPrimeList[i] = gen.nextID();
 		}
@@ -27,7 +28,29 @@ public class PrimeGeneratorTest {
 	}
 	
 	@Test
+	public void stressTest(){
+		for(int i = 0; i<10000; i++){
+			gen.nextID();
+		}
+	}
+	
+	@Test
+	public void nextID(){
+		gen.nextID();
+	}
+	
+	@Test
+	public void isPrimeTest(){
+		assertTrue(gen.isPrime(229));
+	}
+	
+	@Test
 	public void closestPrimeTest(){
 		assertEquals(7L, gen.closestPrime(9L));
+	}
+	
+	@Test
+	public void closestPrimeTest2(){
+		assertEquals(11L, gen.closestPrime(11L));
 	}
 }
