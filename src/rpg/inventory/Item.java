@@ -1,5 +1,7 @@
 package rpg.inventory;
 
+import java.math.BigDecimal;
+
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
@@ -7,13 +9,18 @@ import rpg.utility.IDGenerator;
 
 abstract public class Item {
 	
-	public Item(double weight){
+	public Item(double weight, DucatAmount value){
 		ID = generateID();
 		if(isValidWeight(weight)){
 			this.weight = weight;
 		} else {
 			this.weight = 0;
 		}
+		
+	}
+	
+	public Item(double weight){
+		this(weight, new DucatAmount(BigDecimal.ZERO));
 	}
 	
 	/************************************************
@@ -50,6 +57,10 @@ abstract public class Item {
 	 ************************************************/
 	
 	private DucatAmount value;
+	
+	public void setValue(DucatAmount value){
+		this.value = value;
+	}
 	
 	/************************************************
 	 * Weight

@@ -27,6 +27,14 @@ public class Purse extends Container {
 		
 	private DucatAmount ducatCapacity;
 	
+	public DucatAmount getDucatCapacity(){
+		return this.ducatCapacity;
+	}
+	
+	public void setDucatCapacity(DucatAmount capacity){
+		this.ducatCapacity = capacity;
+	}
+	
 	public void addToContents(DucatAmount ducatAmount){
 		
 	}
@@ -34,6 +42,10 @@ public class Purse extends Container {
 	public double getWeightOfContents() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	public boolean isOverCapacity(){
+		return this.getDucatContent().isGreaterThan(this.getDucatCapacity());
 	}
 	
 	/************************************************
@@ -54,6 +66,8 @@ public class Purse extends Container {
 	 * Value
 	 ************************************************/
 	
-	public DucatAmount getValue()
+	public DucatAmount getValue(){
+		
+	}
 	
 }

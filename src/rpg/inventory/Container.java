@@ -16,6 +16,10 @@ public abstract class Container extends Item{
 	public abstract boolean canHaveAsContent(Item item);
 	
 	private DucatAmount ducatContent;
+	
+	public DucatAmount getDucatContent(){
+		return this.ducatContent;
+	}
 
 	public abstract void addToContents(DucatAmount ducatAmount);
 }
