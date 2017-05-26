@@ -1,14 +1,22 @@
 package rpg;
 
 import java.util.regex.*;
-
 import be.kuleuven.cs.som.annotate.*;
+import rpg.utility.PrimeGenerator;
+import java.math.*;
+
+
 
 /**
  * An abstract class of entities that can move (mobiles).
  * 
  * @invar Each mobile must have a properly spelled name.  
  * 		  |isValidName(getName())
+ * @invar Each mobile must have a valid maximumHitpoints
+		  |isValidMaximumHitpoints(getMaximumHitpoints())
+ * @invar Each mobile must a valid currentHitpoints
+ * 		  | canHaveAsMaximumHitpoints(getCurrentHitpoints())
+ * 
  * @author Robbe, Elias
  * @version 1.0
  *
@@ -54,13 +62,11 @@ abstract public class Mobile {
 	/**
 	 * A pattern which names of mobiles should be made of.
 	 * 
-	 * @return a pattern of acceptable characters for the name.
-	 * 		   | result == Pattern.compile(".")
+	 * @return A pattern of acceptable characters for the name.
+	 * @note   This implementation is worked out in each subclass.
 	 */
 	@Raw @Immutable 
-	public static Pattern getValidNamePattern(){
-		return validNamePattern;
-	}
+	public abstract Pattern getValidNamePattern();
 	
 
 	/**
@@ -91,14 +97,11 @@ abstract public class Mobile {
 	 */
 	private String name = null;
 	
-	/**
-	 * Variable for storing the pattern to which names should abide by.
-	 */
-	private static final Pattern validNamePattern = Pattern.compile(".+");
 	
 	/************************************************
 	 * Hitpoints - nominal programming
 	 ************************************************/
+	
 	
 	/**
 	 * Gives the current hitpoints.
@@ -117,32 +120,70 @@ abstract public class Mobile {
 	}
 	
 	/**
-	 * Sets the current hitpoints to a given amount.
-	 * 
-	 * @param amount
-	 * 		  The new name for the currentHitpoints.
-	 * @Post If the amount is not negative the currentHitpoints is set
-	 * 		 to the given amount.
-	 * 		 | if (amount>=0)
-	 * 		 | then new.getCurrentHitpoints().equals(amount)
+	 * Gives the prime generator.
 	 */
-	public void setCurrentHitpoints(long amount){
-		if (amount >= 0){
-			this.currentHitpoints = amount;
-		}
+	@Raw @Basic
+	public PrimeGenerator getPrimeGenerator(){
+		return primeGen;
 	}
 	
 	/**
-	 * Sets the maximumHitpoints to a given amount.
+	 * Check wheter a given hitpoints can be set as the currentHitpoints.
 	 * 
-	 * @param amount
-	 * 		  The new name for the currentHitpoints.
-	 * @Post 
+	 * @param hitpoints
+	 * 		  The hitpoints to check.
+	 * @return True if given hitpoints are equal or less than the 
+	 * 		   maximumHitpoints and greater than or equal to 0.
+	 * 		   | result == (hitpoints<=this.getMaximumHitpoints() && hitpoints>0)
 	 */
-	public void setMaximumtHitpoints(long amount){
-		if (amount>1){
-			
-		}
+	public boolean canHaveAsCurrentHitpoints(long hitpoints){
+		return (hitpoints<=this.getMaximumHitpoints() && hitpoints>=0);
+	}
+	
+
+	/**
+	 * Checks whether the given hitpoints is valid.
+	 * 
+	 * @param hitpoints
+	 * 		  The hitpoints to check.
+	 * @return true if the given hitpoints is greater than 1 and prime.
+	 * 		   | result == (hitpoints>1 && primeGen.isPrime(hitpoints))
+	 */
+	@Raw
+	public static boolean isValidMaximumHitpoints(long hitpoints){
+		return (hitpoints > 1) && (primeGen.isPrime(hitpoints));
+	}
+	
+	
+	/**
+	 * Sets the currentHitpoints to the given hitpoints
+	 * 
+	 * @param hitpoints
+	 * 		  The new currentHitpoints of the mobile.
+	 * @pre  The given hitpoints must be legal.
+	 * 		 | canHaveAsCurrentHitpoints(hitpoints)
+	 * @post The currentHipoints is set to the given hitpoints.
+	 * 		 | new.getCurrentHitpoints == hitpoints
+	 */
+	@Raw
+	public void setCurrentHitpoints(long hitpoints){
+		this.currentHitpoints = hitpoints;
+	}
+		
+	/**
+	 * Sets the maximum hitpoints to the given hitpoints.
+	 * 
+	 * 
+	 * @param hitpoints
+	 * 		  The new maximumHitpoints of the mobile.
+	 * @pre  the given hitpoints must be legal.
+	 * 		 | isValidMaximumHitpoints(hitpoints)  	
+	 * @post The maximumHitpoints is set to the given hitpoints.
+	 * 		 | new.getMaximumHitpoints == hitpoints	  
+	 */
+	@Raw
+	protected void setMaximumHitpoints(long hitpoints){
+		this.maximumHitpoints = hitpoints;
 	}
 	
 	
@@ -154,7 +195,74 @@ abstract public class Mobile {
 	 * A variable that stores the maximum hitpoints of the mobile.
 	 */
 	private long maximumHitpoints;
+	/**
+	 * A variable that stores a prime generator.
+	 */
+	protected static PrimeGenerator primeGen = new PrimeGenerator();
 	
+	/************************************************
+	 * Strength - total programming
+	 ************************************************/
+	
+	/**
+	 * Returns the rawStrength of the mobile.
+	 */
+	@Raw @Basic
+	public BigDecimal getRawStrength(){
+		return this.rawStrength;
+	}
+	
+	/**
+	 * Multiplies the rawStrenth with an int.
+	 * 
+	 * @param amount
+	 * 		  The multiplier of rawStrength.
+	 * @post The new rawStrenth is the product of amount and getRawStrength.
+	 * 		 | new.rawStrength.equals(getRawStrength*amount)
+	 * @post  If there is not enough memory to store the new rawStrength
+	 * 		  nothing happens.
+	 */
+	public void multiplyRawStrength(int amount){
+		try{
+			BigDecimal multiplier = 
+			BigDecimal.valueOf(amount).setScale(rawStrengthPrecision, RoundingMode.HALF_UP);
+			setRawStrength(getRawStrength().multiply(multiplier));
+		}
+		catch (ArithmeticException ex){}
+
+	}
+	
+	/**
+	 * Sets the RawStrength to the given amount.
+	 * 
+	 * @param amount
+	 * 		  The new rawStrength.
+	 * @post sets the rawStrength to the given amount with two decimal places.
+	 * 	     | new.getRawStrenth() == 
+	 * 		 | amount.setScale(strenthPrecision, RoundingMode.HALF_UP)
+	 */
+	protected void setRawStrength(BigDecimal amount){
+		this.rawStrength = amount.setScale(rawStrengthPrecision, RoundingMode.HALF_UP);
+	}
+	
+
+	/**
+	 * A variable that stores the rawStrength of a mobile.
+	 */
+	private BigDecimal rawStrength = new BigDecimal("0").setScale(rawStrengthPrecision, RoundingMode.HALF_UP);
+
+	/**
+	 * A variable that stores the precision of the strength.
+	 */
+	private static final int rawStrengthPrecision = 2;
+	
+	
+	/************************************************
+	 * Capaciteit
+	 ************************************************/
+	
+	
+
 	
 	
 	
