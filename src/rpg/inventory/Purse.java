@@ -2,6 +2,7 @@ package rpg.inventory;
 
 import rpg.utility.FibonacciGenerator;
 import rpg.utility.IDGenerator;
+import rpg.value.DucatAmount;
 
 public class Purse extends Container {
 	

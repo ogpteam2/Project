@@ -6,6 +6,7 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 import rpg.utility.IDGenerator;
+import rpg.value.DucatAmount;
 
 abstract public class Item {
 	

@@ -1,4 +1,4 @@
-package rpg.inventory;
+package rpg.value;
 
 import java.math.BigDecimal;
 

@@ -6,10 +6,10 @@ public class Hero extends Mobile {
 
 	public Hero(String name) throws IllegalArgumentException {
 		super(name);
-		this.validNamePattern = Pattern.compile("[A-Za-z]+");
+		this.
 	}
 
-	private final Pattern validNamePattern;
+	private static final Pattern validNamePattern = Pattern.compile("[A-Za-z]+");
 	
 	@Override
 	public Pattern getValidNamePattern() {

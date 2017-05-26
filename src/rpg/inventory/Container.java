@@ -1,5 +1,7 @@
 package rpg.inventory;
 
+import rpg.value.DucatAmount;
+
 public abstract class Container extends Item{
 
 	public Container(double weight) {
