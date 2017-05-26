@@ -169,7 +169,7 @@ abstract public class Mobile {
 	public void setCurrentHitpoints(long hitpoints){
 		this.currentHitpoints = hitpoints;
 	}
-	
+		
 	/**
 	 * Sets the maximum hitpoints to the given hitpoints.
 	 * 
@@ -182,9 +182,10 @@ abstract public class Mobile {
 	 * 		 | new.getMaximumHitpoints == hitpoints	  
 	 */
 	@Raw
-	public void setMaximumHitpoints(long hitpoints){
+	protected void setMaximumHitpoints(long hitpoints){
 		this.maximumHitpoints = hitpoints;
 	}
+	
 	
 	/**
 	 * A variable that stores the current hitpoints of the mobile.
@@ -212,19 +213,24 @@ abstract public class Mobile {
 	}
 	
 	/**
-	 * Multiplies the rawStrenth with an interger.
+	 * Multiplies the rawStrenth with an int.
 	 * 
 	 * @param amount
 	 * 		  The multiplier of rawStrength.
-	 * @effect The new rawStrenth is the product of amount and getRawStrength
+	 * @post The new rawStrenth is the product of amount and getRawStrength.
+	 * 		 | new.rawStrength.equals(getRawStrength*amount)
+	 * @post  If there is not enough memory to store the new rawStrength
+	 * 		  nothing happens.
 	 */
 	public void multiplyRawStrength(int amount){
-		BigDecimal multiplier = 
-		BigDecimal.valueOf(amount).setScale(strenthPrecision, RoundingMode.HALF_UP);
-		setRawStrength(getRawStrength().multiply(multiplier));
+		try{
+			BigDecimal multiplier = 
+			BigDecimal.valueOf(amount).setScale(rawStrengthPrecision, RoundingMode.HALF_UP);
+			setRawStrength(getRawStrength().multiply(multiplier));
+		}
+		catch (ArithmeticException ex){}
+
 	}
-	
-	
 	
 	/**
 	 * Sets the RawStrength to the given amount.
@@ -236,29 +242,28 @@ abstract public class Mobile {
 	 * 		 | amount.setScale(strenthPrecision, RoundingMode.HALF_UP)
 	 */
 	protected void setRawStrength(BigDecimal amount){
-		this.rawStrength = amount.setScale(strenthPrecision, RoundingMode.HALF_UP);
+		this.rawStrength = amount.setScale(rawStrengthPrecision, RoundingMode.HALF_UP);
 	}
 	
 
-	
-	
-	
-	
-	
 	/**
 	 * A variable that stores the rawStrength of a mobile.
 	 */
-	private BigDecimal rawStrength = new BigDecimal("0").setScale(strenthPrecision, RoundingMode.HALF_UP);
+	private BigDecimal rawStrength = new BigDecimal("0").setScale(rawStrengthPrecision, RoundingMode.HALF_UP);
 
 	/**
 	 * A variable that stores the precision of the strength.
 	 */
-	private static final int strenthPrecision = 2;
+	private static final int rawStrengthPrecision = 2;
 	
 	
-	
+	/************************************************
+	 * Capaciteit
+	 ************************************************/
 	
 	
 
+	
+	
 	
 }
