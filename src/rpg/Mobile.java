@@ -3,7 +3,7 @@ package rpg;
 import java.util.regex.*;
 import be.kuleuven.cs.som.annotate.*;
 import rpg.utility.PrimeGenerator;
-
+import java.math.*;
 
 
 
@@ -13,7 +13,7 @@ import rpg.utility.PrimeGenerator;
  * @invar Each mobile must have a properly spelled name.  
  * 		  |isValidName(getName())
  * @invar Each mobile must have a valid maximumHitpoints
-		  |canHaveAsMaximumHitpoints(getMaximumHitpoints())
+		  |isValidMaximumHitpoints(getMaximumHitpoints())
  * @invar Each mobile must a valid currentHitpoints
  * 		  | canHaveAsMaximumHitpoints(getCurrentHitpoints())
  * 
@@ -137,10 +137,7 @@ abstract public class Mobile {
 	 * 		   | result == (hitpoints<=this.getMaximumHitpoints() && hitpoints>0)
 	 */
 	public boolean canHaveAsCurrentHitpoints(long hitpoints){
-		if (hitpoints<=this.getMaximumHitpoints() && hitpoints>=0){
-			return true;
-		}
-		return false;
+		return (hitpoints<=this.getMaximumHitpoints() && hitpoints>=0);
 	}
 	
 
@@ -153,37 +150,18 @@ abstract public class Mobile {
 	 * 		   | result == (hitpoints>1 && primeGen.isPrime(hitpoints))
 	 */
 	@Raw
-	public boolean isValidMaximumHitpoints(long hitpoints){
-		if ((hitpoints > 1) && (primeGen.isPrime(hitpoints))){
-			return true;
-		}
-		return false;
+	public static boolean isValidMaximumHitpoints(long hitpoints){
+		return (hitpoints > 1) && (primeGen.isPrime(hitpoints));
 	}
 	
-	/**
-	 * Checks whether a given hitpoints can be set as the new maximumHitpoints.
-	 * 
-	 * @param hitpoints
-	 * 		  The hitpoints to check.
-	 * @return true if the given hitpoints is valid and is it greater than the
-	 * 		   maximumHitpoints.
-	 * 		  | result == (isValidMaximumHitpoints(hitpoints) && 
-	 * 		  | hitpoints>getMaximumHitpoints())
-	 */
-	public boolean canHaveAsMaximumHitpoints(long hitpoints){
-		if (isValidMaximumHitpoints(hitpoints) && hitpoints>getMaximumHitpoints()){
-			return true;
-		}
-		
-		return false;
-	}
 	
 	/**
 	 * Sets the currentHitpoints to the given hitpoints
 	 * 
+	 * @param hitpoints
+	 * 		  The new currentHitpoints of the mobile.
 	 * @pre  The given hitpoints must be legal.
 	 * 		 | canHaveAsCurrentHitpoints(hitpoints)
-	 * @param hitpoints
 	 * @post The currentHipoints is set to the given hitpoints.
 	 * 		 | new.getCurrentHitpoints == hitpoints
 	 */
@@ -193,34 +171,20 @@ abstract public class Mobile {
 	}
 	
 	/**
-	 * Sets the maximum hitpoints of the 
+	 * Sets the maximum hitpoints to the given hitpoints.
+	 * 
 	 * 
 	 * @param hitpoints
+	 * 		  The new maximumHitpoints of the mobile.
+	 * @pre  the given hitpoints must be legal.
+	 * 		 | isValidMaximumHitpoints(hitpoints)  	
+	 * @post The maximumHitpoints is set to the given hitpoints.
+	 * 		 | new.getMaximumHitpoints == hitpoints	  
 	 */
 	@Raw
 	public void setMaximumHitpoints(long hitpoints){
 		this.maximumHitpoints = hitpoints;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * A variable that stores the current hitpoints of the mobile.
@@ -235,8 +199,66 @@ abstract public class Mobile {
 	 */
 	protected static PrimeGenerator primeGen = new PrimeGenerator();
 	
+	/************************************************
+	 * Strength - total programming
+	 ************************************************/
+	
+	/**
+	 * Returns the rawStrength of the mobile.
+	 */
+	@Raw @Basic
+	public BigDecimal getRawStrength(){
+		return this.rawStrength;
+	}
+	
+	/**
+	 * Multiplies the rawStrenth with an interger.
+	 * 
+	 * @param amount
+	 * 		  The multiplier of rawStrength.
+	 * @effect The new rawStrenth is the product of amount and getRawStrength
+	 */
+	public void multiplyRawStrength(int amount){
+		BigDecimal multiplier = 
+		BigDecimal.valueOf(amount).setScale(strenthPrecision, RoundingMode.HALF_UP);
+		setRawStrength(getRawStrength().multiply(multiplier));
+	}
 	
 	
 	
+	/**
+	 * Sets the RawStrength to the given amount.
+	 * 
+	 * @param amount
+	 * 		  The new rawStrength.
+	 * @post sets the rawStrength to the given amount with two decimal places.
+	 * 	     | new.getRawStrenth() == 
+	 * 		 | amount.setScale(strenthPrecision, RoundingMode.HALF_UP)
+	 */
+	protected void setRawStrength(BigDecimal amount){
+		this.rawStrength = amount.setScale(strenthPrecision, RoundingMode.HALF_UP);
+	}
+	
+
+	
+	
+	
+	
+	
+	/**
+	 * A variable that stores the rawStrength of a mobile.
+	 */
+	private BigDecimal rawStrength = new BigDecimal("0").setScale(strenthPrecision, RoundingMode.HALF_UP);
+
+	/**
+	 * A variable that stores the precision of the strength.
+	 */
+	private static final int strenthPrecision = 2;
+	
+	
+	
+	
+	
+
 	
 }
