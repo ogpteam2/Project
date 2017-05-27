@@ -6,6 +6,7 @@ import java.util.regex.*;
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
 import rpg.inventory.Item;
+import rpg.inventory.*;
 import rpg.utility.PrimeGenerator;
 import java.math.*;
 import rpg.value.*;
@@ -20,16 +21,18 @@ import rpg.value.*;
 		  |isValidMaximumHitpoints(getMaximumHitpoints())
  * @invar Each mobile must a valid currentHitpoints
  * 		  | canHaveAsMaximumHitpoints(getCurrentHitpoints())
- * 
+ * @invar The number of anchorpoints must be valid for each mobile.
+ * 		  | canHaveAsNbAnchorpoints(getNbAnchorPoints)
+ * @invar Each mobile can have each of its items at its anchorpoints.
+ *        | for each I in anchorpoints:
+ *        | 	isValidItemAt(getItemAt(I))
  * @author Robbe, Elias
  * @version 1.0
  *
  */
 abstract public class Mobile {
 	
-	private EnumMap<Anchorpoint,Item> anchorpoints;
-	
-	private List<Anchorpoint> validAnchorpoints;
+
 	
 	/************************************************
 	 * Constructors
@@ -301,6 +304,145 @@ abstract public class Mobile {
 	 * Anchors
 	 ************************************************/
 	
+	/**
+	 * Return the number of anchor points ascribed to this mobile.
+	 */
+	@Basic @Raw
+	public int getNbAnchorpoints(){
+		if (anchorpoints != null)
+			return anchorpoints.size();
+		return 0;
+	}
+	
+	/**
+	 * Return the number of valid anchor points ascribed to this mobile.
+	 */
+	@Basic @Raw
+	public int getNbValidAnchorpoints(){
+		if (validAnchorpoints != null)
+			return validAnchorpoints.size();
+		return 0;
+	}
+	
+	/**
+	 * Checks whether the given number of anchor points is valid.
+	 * 
+	 * @param nbAnchorpoints
+	 * 		  The number to check.
+	 * @return True iff the given number lays between 0 and 5 or is 0 or 5.
+	 * 		   | result == ((0<=nbAnchorpoints) && (nbAnchorpoints<=5))
+	 */
+	public static boolean isValidNbAnchorpoints(int nbAnchorpoints){
+		return ((0<=nbAnchorpoints) && (nbAnchorpoints<=5));
+	}
+	
+	
+	/**
+	 * Checks whether this mobile can have the given number as a number of
+	 * 	      anchor points.
+	 * @param number
+	 * 		  The number to check.
+	 * @return True iff the number is a valid and is less than or equal to the number
+	 * 		   of valid anchor points.
+	 * 		   | result ==
+	 * 		   | 	(isValidNbAnchorpoints(number) && number<=getNbValidAnchorpoints())
+	 */
+	@Raw 
+	public boolean canHaveAsNbAnchorpoints(int number){
+		if (isValidNbAnchorpoints(number) && number<=getNbValidAnchorpoints())
+			return true;
+		return false;
+	}
+	
+	
+	/**
+	 * Returns the item at a given anchorpoint
+	 * 
+	 * @param anchorpoint
+	 * 		  The item of this anchorpoint is given.
+	 * @return The item at the anchorpoint if the anchorpoint is not null.
+	 * 		   | if (anchorpoint != null)
+	 * 		   | then	result == anchorpoints.get(anchorpoint)
+	 * @return Null if the anchorpoint is null.
+	 * 		   | if (anchorpoint == null)
+	 * 		   |	then result == null
+	 */
+	@Basic @Raw
+	public Item getItemAt(Anchorpoint anchorpoint){
+		if (anchorpoint != null)
+			return anchorpoints.get(anchorpoint);
+		return null;
+	}
+	
+	/**
+	 * Checks whether the given item is valid for the given anchorpoint.
+	 * 
+	 * @param item
+	 * 		  The item to check at the given anchorpoint.
+	 * @param anchorpoint
+	 * 		  The anchorpoint to check with the given item.
+	 * @return False if the anchorpoint is not effective.
+	 *		   | result == (anchorpoint == null)
+	 * @return False if the item is a purse but it is not equipped at the belt.
+	 * 		   | result == (item instanceof Purse) && (anchorpoint.getAnchorpoint()!="BELT")
+	 * @return True otherwise.
+	 */   
+	public static boolean isValidItemAt(Item item,Anchorpoint anchorpoint){
+		if (anchorpoint == null)
+			return false;
+		if ( (item instanceof Purse) && (anchorpoint.getAnchorpoint()!="BELT"))
+			return false;
+		return true;
+	}
+	
+	/**
+	 * Checks whether the given anchor point is valid for this mobile.
+	 * 
+	 * @param anchorpoint
+	 * 		  The anchor point to check.
+	 * @return True iff the valid anchor points contains the given anchor point.
+	 * 	       | result == alidAnchorpoints.contains(anchorpoint)
+	 */
+	public boolean canHaveAsAnchorpoint(Anchorpoint anchorpoint){
+		return validAnchorpoints.contains(anchorpoint);
+	}
+	
+	
+	/**
+	 * @pre The anchor point should be empty.
+	 * 	    | null == getItemAt(anchorpoint)
+	 * @pre The anchor point should be valid.
+	 *      | canHaveAsAnchorpoint(anchorpoint)
+	 * @pre The anchor point should be able to set the current item.
+	 *      | isValidItemAt(item,anchorpoint)
+	 * @param item
+	 * 		  The item to set at the given anchor point.
+	 * @param anchorpoint
+	 * 		  The anchor point to set te given item.
+	 * @post The item is set at the given anchor point.
+	 * 	     | anchorpoints.put(anchorpoint, item);
+	 * 
+	 */
+	public void setItemAt(Item item,Anchorpoint anchorpoint){
+		assert (getItemAt(anchorpoint) == null);
+		assert canHaveAsAnchorpoint(anchorpoint);
+		assert isValidItemAt(item,anchorpoint);
+		anchorpoints.put(anchorpoint, item);
+	}
+	
+	/**
+	 * Removes the item at the given anchor point.
+	 * 
+	 * @param anchorpoint
+	 * 		  The anchorpoint to remove.
+	 * 
+	 */
+	public void removeItemAt(Anchorpoint anchorpoint){
+		Item item = anchorpoints.get(anchorpoint);
+		item.removeHolder();
+		anchorpoints.remove(anchorpoint);
+	}
+
 	
 	
 	
@@ -309,8 +451,14 @@ abstract public class Mobile {
 	
 	
 	/**
-	 * Variable referencing an array assembling the anchors ascribed to this mobile.
+	 * A variable referencing the anchor point with the corresponding Item.
 	 */
-	private Object anchors[];
+	private EnumMap<Anchorpoint,Item> anchorpoints = new EnumMap<>(Anchorpoint.class);
 	
+	/**
+	 * A variable referencing the valid anchor points of this mobile,
+	 * if the anchor point is in the list the anchor point is valid.
+	 */
+	private List<Anchorpoint> validAnchorpoints;
+
 }
