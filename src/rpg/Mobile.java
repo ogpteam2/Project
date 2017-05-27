@@ -1,7 +1,11 @@
 package rpg;
 
+import java.util.EnumMap;
+import java.util.List;
 import java.util.regex.*;
 import be.kuleuven.cs.som.annotate.*;
+import rpg.inventory.Anchorpoint;
+import rpg.inventory.Item;
 import rpg.utility.PrimeGenerator;
 import java.math.*;
 import rpg.value.*;
@@ -22,6 +26,10 @@ import rpg.value.*;
  *
  */
 abstract public class Mobile {
+	
+	private EnumMap<Anchorpoint,Item> anchorpoints;
+	
+	private List<Anchorpoint> validAnchorpoints;
 	
 	/************************************************
 	 * Constructors
