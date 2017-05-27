@@ -25,7 +25,7 @@ import rpg.value.*;
  * 		  | canHaveAsNbAnchorpoints(getNbAnchorPoints)
  * @invar Each mobile can have each of its items at its anchorpoints.
  *        | for each I in anchorpoints:
- *        | 	isValidItemAt(getItemAt(I))
+ *        | 	canHaveAsItemAt(getItemAt(I))
  * @author Robbe, Elias
  * @version 1.0
  *
@@ -254,6 +254,7 @@ abstract public class Mobile {
 	 */
 	protected void setRawStrength(BigDecimal amount){
 		this.rawStrength = amount.setScale(rawStrengthPrecision, RoundingMode.HALF_UP);
+		setCapacity();
 	}
 	
 
@@ -395,6 +396,7 @@ abstract public class Mobile {
 		return true;
 	}
 	
+
 	/**
 	 * Checks whether the given anchor point is valid for this mobile.
 	 * 
@@ -407,6 +409,87 @@ abstract public class Mobile {
 		return validAnchorpoints.contains(anchorpoint);
 	}
 	
+	/**
+	 * Checks wheter all items in the anchor points have the same unit.
+	 * 
+	 * @param unit
+	 * 		  The unit to check.
+	 * @return True iff all items have the same type.
+	 * 		   | for (Item w: anchorpoints.values())
+	 *         | 	if (w != null && w.getWeight().getUnit() != unit)
+	 *         |		result == false
+	 *         | result == true
+	 */  
+	public boolean alItemsInUnit(Unit unit){
+		for (Item w: anchorpoints.values()){
+			if (w != null && w.getWeight().getUnit() != unit){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Returns the total capacity of the anchor points.
+	 * 
+	 * @pre The items in the anchor points should have the unit kg.
+	 *      | alItemsInUnit(Unit.kg)
+	 * @return The total capacity of the anchorpoints if they all have the same unit.
+	 * 		   | if (alItemsInUnit(Unit.kg)
+	 * 	       | then 
+	 * 		   | let total = 0
+	 *         | for (Item w: anchorpoints.values())
+	 *         | 	total = total.add(w.getWeight().getNumeral())
+	 *         | result.equals(total)
+	 * @throws IllegalArgumentException
+	 * 	       The items have different units.
+	 * 		   |  (!alItemsInUnit(Unit.kg)
+	 */ 
+	public Weight getCapacityOfAnchorpoints()
+		throws IllegalArgumentException
+	{
+		if (alItemsInUnit(Unit.kg)){
+			Weight total = new Weight(BigDecimal.ZERO,Unit.kg);
+			for (Item w: anchorpoints.values()){
+				if (w != null){
+					total = total.add(w.getWeight());
+				}
+			}
+			return total;
+		}
+		else{
+			throw new IllegalArgumentException("Put the items in kg.");
+		}
+			
+	}
+
+	/**
+	 * Checks whether the item can be set at the given anchor point.
+	 * @pre Everything should be in kg.
+	 * 		| getCapacityOfAnchorpoints().getUnit() == Unit.kg &&
+	 * 		| 	item.getWeigh().getUnit() == Unit.kg
+	 * @param item
+	 *        The item to check.
+	 * @param anchorpoint
+	 *        The anchor point to check where the item will be.
+	 * @return True if the current weight of the anchor points plus the 
+	 * 		   weight of the item is less than this capacity.
+	 * 		  | if (canHaveAsAnchorpoint(anchorpoint) && isValidItemAt(item,anchorpoint))
+	 * 		  | then let currentCapacityOfAnchorpoints =  getCapacityOfAnchorpoints()
+	 *        | 	if ((currentCapacityOfAnchorpoints.add(item.getWeight()))
+	 *		  |			.compareTo(GetCapacity()) == -1)
+	 *		  | 	then	result == true
+	 */
+	public boolean canHaveAsItemAt(Item item, Anchorpoint anchorpoint){
+		if (canHaveAsAnchorpoint(anchorpoint) && isValidItemAt(item,anchorpoint)){
+			Weight currentCapacityOfAnchorpoints =  getCapacityOfAnchorpoints();
+			if ((currentCapacityOfAnchorpoints.add(item.getWeight()))
+					.compareTo(GetCapacity()) == -1){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	/**
 	 * @pre The anchor point should be empty.
@@ -414,7 +497,7 @@ abstract public class Mobile {
 	 * @pre The anchor point should be valid.
 	 *      | canHaveAsAnchorpoint(anchorpoint)
 	 * @pre The anchor point should be able to set the current item.
-	 *      | isValidItemAt(item,anchorpoint)
+	 *      | canHaveAsItemAt(item,anchorpoint)
 	 * @param item
 	 * 		  The item to set at the given anchor point.
 	 * @param anchorpoint
@@ -435,7 +518,10 @@ abstract public class Mobile {
 	 * 
 	 * @param anchorpoint
 	 * 		  The anchorpoint to remove.
-	 * 
+	 * @post The holder of the item at the anchorpoint is removed
+	 * 		 | item.removeHolder()
+	 * @post The item at the anchorpoint is removed.
+	 *       | anchorpoints.remove(anchorpoint)
 	 */
 	public void removeItemAt(Anchorpoint anchorpoint){
 		Item item = anchorpoints.get(anchorpoint);
@@ -443,13 +529,6 @@ abstract public class Mobile {
 		anchorpoints.remove(anchorpoint);
 	}
 
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * A variable referencing the anchor point with the corresponding Item.
 	 */
@@ -460,5 +539,21 @@ abstract public class Mobile {
 	 * if the anchor point is in the list the anchor point is valid.
 	 */
 	private List<Anchorpoint> validAnchorpoints;
+	
+	/************************************************
+	 * Hit
+	 ************************************************/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
