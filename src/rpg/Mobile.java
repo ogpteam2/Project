@@ -261,9 +261,48 @@ abstract public class Mobile {
 	 * Capacity
 	 ************************************************/
 	
+	/**
+	 * Return the capacity of this mobile.
+	 */
+	@Raw @Basic
+	public Weight GetCapacity(){
+		return this.capacity;
+	}
 	
-
+	/**
+	 * Sets the capacity of a mobile based on the raw strength.
+	 * 
+	 * @post The new capacity is set to a weight based on the raw strength.
+	 * @note The precise definition of this method is worked out in each subclass.
+	 */
+	protected abstract void setCapacity();
 	
 	
+	/**
+	 * A variable referencing the capacity of this mobile.
+	 */
+	private Weight capacity = new Weight(BigDecimal.ZERO);
+	
+	
+	/************************************************
+	 * Protection
+	 ************************************************/
+	
+	
+	/************************************************
+	 * Anchors
+	 ************************************************/
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Variable referencing an array assembling the anchors ascribed to this mobile.
+	 */
+	private Object anchors[];
 	
 }
