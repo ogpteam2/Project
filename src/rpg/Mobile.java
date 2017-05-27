@@ -40,8 +40,6 @@ abstract public class Mobile {
 	}
 	
 	
-	
-	
 	/************************************************
 	 * Name - defensive programming
 	 ************************************************/
@@ -275,7 +273,7 @@ abstract public class Mobile {
 	 * Return the capacity of this mobile.
 	 */
 	@Raw @Basic
-	public Weight getCapacity(){
+	public Weight GetCapacity(){
 		return this.capacity;
 	}
 	
