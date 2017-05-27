@@ -2,6 +2,7 @@ package rpg;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.*;
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
@@ -20,7 +21,7 @@ import rpg.value.*;
  * @invar Each mobile must have a valid maximumHitpoints
 		  |isValidMaximumHitpoints(getMaximumHitpoints())
  * @invar Each mobile must a valid currentHitpoints
- * 		  | canHaveAsMaximumHitpoints(getCurrentHitpoints())
+ * 		  | canHaveAsCurrentHitpoints(getCurrentHitpoints())
  * @invar The number of anchorpoints must be valid for each mobile.
  * 		  | canHaveAsNbAnchorpoints(getNbAnchorPoints)
  * @invar Each mobile can have each of its items at its anchorpoints.
@@ -37,10 +38,61 @@ abstract public class Mobile {
 	/************************************************
 	 * Constructors
 	 ************************************************/
-	
-	public Mobile(String name) throws IllegalArgumentException{
-		setName(name);
+	/**
+	 * Initialializes a new Mobile
+	 * 
+	 * @param name
+	 * 		  The name for the mobile.
+	 * @param hitpoints
+	 * 		  The hitpoints for the mobile.
+	 * @param strength
+	 * 	      The strength for the mobile.
+	 * @pre The name must be valid.
+	 * 		| isValidName(name)
+	 * @pre The hitpoints must be valid
+	 *      | isValidMaximumHitpoints(hitpoints);
+	 *      | canHaveAsCurrentHitpoints(hitpoints);
+	 * @effect The name is set to the given name.
+	 * 		   | this.setName(name)
+	 * @effect The current- and maximum hitpoints is set to the given hitpoints.
+	 * 		   | this.setMaximumHitpoints(hitpoints)
+	 * 	       | this.setCurrentHitpoints(hitpoints)
+	 * @effect The strength is set to the given strenth.
+	 *   	   | this.setRawStrength(strength)
+	 */
+	public Mobile(String name,long hitpoints, BigDecimal strength) 
+	{
+		assert isValidName(name);
+		assert isValidMaximumHitpoints(hitpoints);
+		assert canHaveAsCurrentHitpoints(hitpoints);
+		
+		this.setName(name);
+		this.setMaximumHitpoints(hitpoints);
+		this.setCurrentHitpoints(hitpoints);
+		this.setRawStrength(strength);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	/************************************************
@@ -300,6 +352,18 @@ abstract public class Mobile {
 	 * Protection
 	 ************************************************/
 	
+	/**
+	 * Returns the rawProtection of the mobile.
+	 */
+	@Raw @Basic @Immutable
+	public int getRawProtection(){
+		return rawProtection;
+	}
+	
+	/**
+	 * A variable referencing the rawProtection of the mobile.
+	 */
+	private final int rawProtection = 10;
 	
 	/************************************************
 	 * Anchors
@@ -544,16 +608,95 @@ abstract public class Mobile {
 	 * Hit
 	 ************************************************/
 	
+	/**
+	 * Hits another mobile.
+	 * 
+	 * @param other
+	 * 		  The other mobile to hit.
+	 * @effect The other mobile is damaged with the calculated damage of the mobile
+	 * 		   if the random number created is greater than the others procection.
+	 * 		   |
+	 */
+	public void hit(Mobile other){
+		int randomNum = randomZeroToHundred();
+		if (other.isHigherThanProtection(randomNum,other)){
+			int damage = calculateDamage();
+			other.damage(other, damage);
+			if (other.getCurrentHitpoints() == 0 ){
+				this.heal();
+				this.collectTreasures(other);
+			}
+		}
+	}
 	
+	/**
+	 * Return a pseudorandom number between 0 and 100 including both ends.
+	 * 
+	 * @return A number between 0 and 100.
+	 * 		   | for one I in 1..100 
+	 * 	       | 	result == I.  
+	 */		
+	protected int randomZeroToHundred(){
+		return ThreadLocalRandom.current().nextInt(0, 100 + 1);
+	}
 	
+	/**
+	 * Checks if a number is higher than the protection of the other mobile.
+	 * 
+	 * @param amount
+	 * 		  The amount to check against the protection of the other mobile.
+	 * @param other
+	 * 		  The other mobile protection to check against the amount.
+	 * @return True or False
+	 * @note The implementation is worked out in each subclass.
+	 */
+	protected abstract boolean isHigherThanProtection(int amount, Mobile other);
 	
+	/**
+	 * Calculates the damage that the mobile can hit.
+	 * @return The damage the mobile can hit.
+	 */
+	protected abstract int calculateDamage();
 	
+	/**
+	 * Damages the other mobile with a given amount.
+	 * 
+	 * @param other
+	 * 		  The other mobile to damage.
+	 * @param amount
+	 * 		  The damage amount.
+	 * @effect The new current hitpoints of the other are the current hipoints minus
+	 * 		   the given amount.
+	 * 		   | other.setCurrentHitpoints(other.getCurrentHitpoints()-(long)amount)
+	 * @effect If the current hitpoints should fall below 0 they are set to 0.
+	 * 		   | if (other.getCurrentHitpoints() - (long)amount <= 0)
+			   | then	other.setCurrentHitpoints(0);
+	 */
+	protected void damage(Mobile other, int amount){
+		if (other.getCurrentHitpoints() - (long)amount <= 0){
+			other.setCurrentHitpoints(0);
+		}
+		other.setCurrentHitpoints(other.getCurrentHitpoints()-(long)amount);
+		
+	}
 	
+	/**
+	 * Heals the mobile an amount based on the difference between max and current
+	 * Hitpoints
+	 * @note The implementation will happen at the subclasses.
+	 */
+	protected abstract void heal();
 	
+	/************************************************
+	 * Collect Treasures
+	 ************************************************/
 	
-	
-	
-	
-	
+	/**
+	 * If a mobile kills another mobile he can collect the items from it.
+	 * 
+	 * @param other
+	 * 		 The other mobile to collect items from.
+	 */
+	protected abstract void collectTreasures(Mobile other);
 
 }
