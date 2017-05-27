@@ -7,41 +7,41 @@ import java.math.RoundingMode;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * A class of capacity amounts with a given numeral and a unit.
+ * A class of weights with a given numeral and a unit.
  * 
- * @invar The numeral of each capacity amount must be valid.
+ * @invar The numeral of each weight must be valid.
  * 		  | isValidNumeral(getNumeral())
- * @invar The unit of each Capacity amount must be a valid unit.
+ * @invar The unit of each weight must be a valid unit.
  * 		  | isValidUnit(getUnit())
  * @author Robbe, Elias
  * @version 1.0
  */
 @Value
-public class CapacityAmount implements Comparable<CapacityAmount> {
+public class Weight implements Comparable<Weight> {
 	
 	/**
-	 * Initialize the new capacity amount with given numeral and given unit.
+	 * Initialize the new weight with given numeral and given unit.
 	 * 
 	 * @param numeral
-	 * 		  The numeral for this new capacity amount.
+	 * 		  The numeral for this new weight.
 	 * @param unit
-	 * 		  The unit for this new capacity amount.
+	 * 		  The unit for this new weight.
 	 * @post  The numeral of this new capacity amount is equal to 
 	 * 		  the given numeral rounded (using half down) to a decimal 
 	 * 		  number with 1 fractional digits.
 	 * 		  | let roundedNumeral = numeral.roud(getContextForScale1(numeral))
 	 * 		  | in new.getNumeral().equals(numeral))
-	 * @post The unit for this new capacity amount is the same as the given unit.
+	 * @post The unit for this new weight is the same as the given unit.
 	 * 		 | new.getUnit() == unit
 	 * @throws IllegalArgumentException
 	 *   	   The given numeral is not effective.
 	 *   	   | numeral == null
 	 * @throws IllegalArgumentException
-	 *    	   The given unit is not a valid unit for any capacity amount.
+	 *    	   The given unit is not a valid unit for any weight.
 	 *         | ! isValidUnit()
 	 */
 	@Raw
-	public CapacityAmount(BigDecimal numeral, Unit unit)
+	public Weight(BigDecimal numeral, Unit unit)
 		throws IllegalArgumentException
 	{
 		if (numeral == null)
@@ -55,26 +55,26 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 	}
 	
 	/**
-	 * Initialize this new capacity amount with given numeral and unit "kg".
+	 * Initialize this new weight with given numeral and unit "kg".
 	 * 
 	 * @param numeral
-	 * 		  The numeral for this new capacity amount.
-	 * @effect The new capacity amount is initialized with the given numeral
+	 * 		  The numeral for this new weight.
+	 * @effect The new weight is initialized with the given numeral
 	 *         and the unit "kg".
 	 *         | this(numeral, Unit.kg)
 	 */
 	@Raw
-	public CapacityAmount(BigDecimal numeral)
+	public Weight(BigDecimal numeral)
 			throws IllegalArgumentException
 	{
 		this(numeral,Unit.kg);
 	}
 	
 	/**
-	 * Variable referencing a capacity amount of 0.0 kg
+	 * Variable referencing a weight of 0.0 kg
 	 */
-	public final static CapacityAmount kg_0 = 
-			new CapacityAmount(BigDecimal.ZERO,Unit.kg);
+	public final static Weight kg_0 = 
+			new Weight(BigDecimal.ZERO,Unit.kg);
 	
 	/**
 	 * Return the numeral of this capacity amount.
@@ -85,7 +85,7 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 	}
 	
 	/**
-	 * Checks whether the given numeral is a valid numeral for any capacity amount.
+	 * Checks whether the given numeral is a valid numeral for any weight.
 	 * 
 	 * @param numeral
 	 * 		  The numeral to check.
@@ -99,12 +99,12 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 	}
 	
 	/**
-	 * A variable that references the numeral of this capacity amount.
+	 * A variable that references the numeral of this weight.
 	 */
 	private final BigDecimal numeral;
 	
 	/**
-	 * Returns the unit of this capacity amount.
+	 * Returns the unit of this weight.
 	 */
 	@Basic @Raw @Immutable
 	public Unit getUnit(){
@@ -112,7 +112,7 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 	}
 	
 	/**
-	 * Checks whether a given unit is valid for any capacity amount.
+	 * Checks whether a given unit is valid for any weight.
 	 * 
 	 * @param unit
 	 *        The unit to check
@@ -124,16 +124,16 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 	}
 
 	/**
-	 * Return a capacity amount that has the same value as this capacity amount
+	 * Return a capacity amount that has the same value as this weight
 	 * exxpressed in the given unit.
 	 * 
 	 * @param unit
-	 *        The unit in which to current capacity amount will be converted.
-	 * @return The resulting capacity amount has the given unit as its unit.
+	 *        The unit in which to current weight will be converted.
+	 * @return The resulting weight has the given unit as its unit.
 	 *         | result.getUnit() == unit
-	 * @return The numeral of the resulting capacity amount is equal to the numeral
-	 * 		   of this capacity amount multiplied with the conversion rate from the 
-	 *         unit of this capacity amount to the given unit rounded half down to a
+	 * @return The numeral of the resulting weight is equal to the numeral
+	 * 		   of this weight multiplied with the conversion rate from the 
+	 *         unit of this weight to the given unit rounded half down to a
 	 *         scale of 2.
 	 *         | let conversionRate = this.getUnit().toUnit(unit),
 	 *         |     numeralInCurreny = this.getNumeral().multiply(conversionRate)
@@ -143,7 +143,7 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 	 * 		   The given unit is not effective
 	 *  	   | unit == null
 	 */       
-	public CapacityAmount toUnit(Unit unit)
+	public Weight toUnit(Unit unit)
 		throws IllegalArgumentException
 	{
 		if (unit == null)
@@ -157,30 +157,30 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 				getNumeral().multiply(conversionRate);
 		numeralInUnit =
 				numeralInUnit.round(getContextForScale2(numeralInUnit));
-		return new CapacityAmount(numeralInUnit,unit);
+		return new Weight(numeralInUnit,unit);
 	}
 	
 	/**
-	 * Variable referencing the unit of this capacity amount.
+	 * Variable referencing the unit of this weight.
 	 */
 	private final Unit unit;
 	
 
 	/**
-	 * Compare this capacity amount with another capacity amount.
+	 * Compare this capacity amount with another weight.
 	 * 
 	 * @param other
-	 *        The other capacity amount to compare with this one.
+	 *        The other weight to compare with this one.
 	 * @return The result is equal to the comparison between this numeral
 	 * 		   and the other numeral.
 	 *         | result == getNumeral().compareTo(other.getNumeral())
 	 * @throws  ClassCastException
-	 *         the other capacity amount is not effective or this capacity amount
+	 *         the other weight is not effective or this weight
 	 *         and the other use different units.
 	 *		   | ( (other == null) || (this.getUnit() != other.getUnit()) )
 	 */
 	@Override
-	public int compareTo(CapacityAmount other)
+	public int compareTo(Weight other)
 		throws ClassCastException
 	{
 		if (other == null)
@@ -191,18 +191,18 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 	}
 	
 	/**
-	 * Checks whether this capacity amount has the same value as the other one.
+	 * Checks whether this weight has the same value as the other one.
 	 * 
 	 * @param other
-	 * 		  The other capacity amount to compare this with.
-	 * @return True iff this capacity amount is equal to the other one
-	 *         expressed in the currency of this amount.
+	 * 		  The other weight to compare this with.
+	 * @return True iff this weight is equal to the other one
+	 *         expressed in the unit of this weight.
 	 *        | result == this.equals(other.toUnit(getUnit()) 
 	 * @throws IllegalArgumentException
 	 * 		   The other capacity amount is not effective.
 	 * 		   | other == null
 	 */
-	public boolean hasSameValue(CapacityAmount other)
+	public boolean hasSameValue(Weight other)
 		throws IllegalArgumentException
 	{
 		if (other == null)
@@ -211,12 +211,12 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 	}
 	
 	/**
-	 * Checks whether this capacity amount is equal to the given object.
+	 * Checks whether this weight is equal to the given object.
 	 * 
-	 * @return True iff the given object is effective, if this capacity amount
+	 * @return True iff the given object is effective, if this weight
 	 * 		   and the given object belong to the same class. and if this 
-	 * 		   capacity amount and the other object interpreted as a 
-	 * 		   capacity amount have equal numerals and equal units.
+	 * 		   weight and the other object interpreted as a 
+	 * 		   weight have equal numerals and equal units.
 	 * 		   | result == ( (other != null) && (this.getClass() == other.getClass() 
 	 * 		   |              && (this.getNumeral().equals((capacityAmount other)
 	 * 								.getNumeral())) && (this.getUnit() == 
@@ -228,13 +228,13 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 			return false;
 		if (this.getClass() != other.getClass())
 			return false;
-		CapacityAmount otherAmount = (CapacityAmount) other;
+		Weight otherAmount = (Weight) other;
 		return (this.getNumeral().equals(otherAmount.getNumeral()) &&
 				( this.getUnit() == otherAmount.getUnit()) );
 	}
 	
 	/**
-	 * Return the hash code for this capacity amount.
+	 * Return the hash code for this weight.
 	 */
 	@Override
 	public int hashCode(){
@@ -242,10 +242,10 @@ public class CapacityAmount implements Comparable<CapacityAmount> {
 	}
 	
 	/**
-	 * Return a textual representation of this capacity amount.
+	 * Return a textual representation of this weight.
 	 * 
 	 * @return A string consisting of the textual representation
-	 * 		   of the numeral of this capacity amount, followed by
+	 * 		   of the numeral of this weight, followed by
 	 * 		   the textual representation of its unit, separated by a space
 	 * 		   and enclosed in square brackets.
 	 * 	       |result.equals("[" + getNumeral().toString() +
