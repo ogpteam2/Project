@@ -7,6 +7,8 @@ import be.kuleuven.cs.som.annotate.Value;
 @Value
 public class DucatAmount implements Comparable<DucatAmount> {
 
+	private static final Weight DUCAT_WEIGHT = new Weight(new BigDecimal(50),Unit.g);
+	
 	public DucatAmount(BigDecimal amount) throws IllegalArgumentException {
 		if (amount == null)
 			throw new IllegalArgumentException();
@@ -17,9 +19,25 @@ public class DucatAmount implements Comparable<DucatAmount> {
 	public DucatAmount() {
 		this(BigDecimal.ONE);
 	}
+	
+	public DucatAmount(double amount){
+		this(new BigDecimal(amount));
+	}
+	
+	public DucatAmount(int amount){
+		this(new BigDecimal(amount));
+	}
 
 	private final BigDecimal amount;
+	
+	/******************************************
+	 * Weight
+	 ******************************************/
 
+	public Weight getWeight(){
+		return DUCAT_WEIGHT.multiply(this.getValue());
+	}
+	
 	/******************************************
 	 * Logic
 	 ******************************************/
