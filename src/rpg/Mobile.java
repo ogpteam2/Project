@@ -151,7 +151,7 @@ abstract public class Mobile {
 	 */
 	@Raw
 	public static boolean isValidMaximumHitpoints(long hitpoints){
-		return (hitpoints > 1) && (primeGen.isPrime(hitpoints));
+		return ((hitpoints > 1) && (primeGen.isPrime(hitpoints)));
 	}
 	
 	
@@ -258,7 +258,7 @@ abstract public class Mobile {
 	
 	
 	/************************************************
-	 * Capaciteit
+	 * Capacity
 	 ************************************************/
 	
 	
