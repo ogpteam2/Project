@@ -1,23 +1,28 @@
 package rpg.inventory;
 
 import rpg.value.DucatAmount;
+import rpg.value.Weight;
 
 public abstract class Container extends Item{
 
-	public Container(double weight) {
+	public Container(Weight weight, DucatAmount ducatContent) {
 		super(weight);
-		// TODO Auto-generated constructor stub
-	}
-
-	public double getTotalWeight(){
-		return getWeight() + getWeightOfContents();
+		addToContents(ducatContent);
 	}
 	
-	public abstract double getWeightOfContents();
+	public Container(Weight weight){
+		super(weight);
+	}
+
+	public Weight getTotalWeight(){
+		return getWeight().add(getWeightOfContents());
+	}
+	
+	public abstract Weight getWeightOfContents();
 	
 	public abstract boolean canHaveAsContent(Item item);
 	
-	private DucatAmount ducatContent;
+	private DucatAmount ducatContent = new DucatAmount();
 	
 	public DucatAmount getDucatContent(){
 		return this.ducatContent;

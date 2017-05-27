@@ -7,20 +7,21 @@ import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 import rpg.utility.IDGenerator;
 import rpg.value.DucatAmount;
+import rpg.value.Weight;
 
 abstract public class Item {
 	
-	public Item(double weight, DucatAmount value){
+	public Item(Weight weight, DucatAmount value){
 		ID = generateID();
 		if(isValidWeight(weight)){
 			this.weight = weight;
 		} else {
-			this.weight = 0;
+			this.weight = new Weight(BigDecimal.ZERO);
 		}
 		
 	}
 	
-	public Item(double weight){
+	public Item(Weight weight){
 		this(weight, new DucatAmount(BigDecimal.ZERO));
 	}
 	
@@ -67,16 +68,16 @@ abstract public class Item {
 	 * Weight
 	 ************************************************/
 	
-	private final double weight;
+	private final Weight weight;
 	
 	@Raw
 	@Immutable
-	public double getWeight(){
+	public Weight getWeight(){
 		return this.weight;
 	}
 	
-	public boolean isValidWeight(double weight){
-		return weight >= 0;
+	public boolean isValidWeight(Weight weight){
+		return weight != null;
 	}
 	
 	
