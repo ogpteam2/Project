@@ -1,5 +1,7 @@
 package rpg.inventory;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 import rpg.value.DucatAmount;
 import rpg.value.Weight;
 
@@ -24,8 +26,15 @@ public abstract class Container extends Item{
 	
 	private DucatAmount ducatContent = new DucatAmount();
 	
+	@Raw
+	@Basic
 	public DucatAmount getDucatContent(){
 		return this.ducatContent;
+	}
+	
+	@Raw
+	public void setDucatContent(DucatAmount content){
+		this.ducatContent = content;
 	}
 
 	public abstract void addToContents(DucatAmount ducatAmount);

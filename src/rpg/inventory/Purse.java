@@ -38,7 +38,11 @@ public class Purse extends Container {
 
 	public void addToContents(DucatAmount ducatAmount) {
 		DucatAmount newContent = this.getDucatContent().add(ducatAmount);
-		
+		if(newContent.isGreaterThan(ducatCapacity)){
+			this.tear();
+		} else {
+			this.setDucatContent(newContent);
+		}
 	}
 
 	public Weight getWeightOfContents() {

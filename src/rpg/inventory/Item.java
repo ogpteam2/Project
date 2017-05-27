@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
+import rpg.Mobile;
 import rpg.utility.IDGenerator;
 import rpg.value.DucatAmount;
 import rpg.value.Weight;
@@ -94,5 +95,7 @@ abstract public class Item {
 	public Container getContainer(){
 		return this.container;
 	}
+	
+	public Mobile holder = null;
 	
 }
