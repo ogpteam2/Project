@@ -70,6 +70,10 @@ public class Weight implements Comparable<Weight> {
 		this(numeral,Unit.kg);
 	}
 	
+	public Weight(int weight, Unit unit){
+		this(new BigDecimal(weight), unit);
+	}
+	
 	/**
 	 * Variable referencing a weight of 0.0 kg
 	 */
@@ -184,9 +188,9 @@ public class Weight implements Comparable<Weight> {
 		throws ClassCastException
 	{
 		if (other == null)
-			throw new ClassCastException("Non-effective capacity amount");
+			throw new ClassCastException("Non-effective weight");
 		if (getUnit() != other.getUnit())
-			throw new ClassCastException("Incompatible capacity amounts");
+			throw new ClassCastException("Incompatible units");
 		return getNumeral().compareTo(other.getNumeral());
 	}
 	
@@ -276,6 +280,28 @@ public class Weight implements Comparable<Weight> {
 		assert value != null;
 		return new MathContext(value.precision()-value.scale()+2,
 				RoundingMode.HALF_DOWN);
+	}
+	
+	/**
+	 * 
+	 * @param other
+	 * @return
+	 */
+	public Weight add(Weight other){
+		BigDecimal total = BigDecimal.ZERO;
+		total.add(this.getNumeral());
+		total.add(other.toUnit(this.getUnit()).getNumeral());
+		return new Weight(total);
+	}
+	
+	public Weight multiply(BigDecimal factor){
+		BigDecimal result = this.getNumeral();
+		result = result.multiply(factor);
+		return new Weight(result, this.getUnit());
+	}
+	
+	public Weight multiply(double factor){
+		return multiply(new BigDecimal(factor));
 	}
 	
 }
