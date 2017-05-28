@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import be.kuleuven.cs.som.annotate.Raw;
 import rpg.Mobile;
 import rpg.exception.InvalidContentException;
 import rpg.exception.ItemTransferException;
@@ -156,7 +157,9 @@ public class Backpack extends Container {
 		return this.contents;
 	}
 	
-	/
+	/**
+	 * Checks if the given item can be added to the backpack
+	 */
 	public boolean canHaveAsContent(Item item) {
 		if(isOverCapacity(this.getWeightOfContents().add(item.getWeight()))){
 			return false;
@@ -165,6 +168,14 @@ public class Backpack extends Container {
 		}
 	}
 
+	/**
+	 * Adds the item to the backpack
+	 * @param item
+	 * 			The item to be added
+	 * @throws InvalidContentException
+	 * 			If the item cannot be added, exception is thrown.
+	 * @effect The item is now inside the backpack.
+	 */
 	public void addToContents(Item item) throws InvalidContentException {
 		if (canHaveAsContent(item)) {
 			insertIntoContents(item);
@@ -174,6 +185,12 @@ public class Backpack extends Container {
 		}
 	}
 
+	/**
+	 * Inserts an item into the item storage structure.
+	 * @param item
+	 * 		Item to be added.
+	 */
+	@Raw
 	private void insertIntoContents(Item item) {
 		ArrayList<Item> sameIDItems = contents.get(item.getID());
 		if (sameIDItems == null)
@@ -182,6 +199,11 @@ public class Backpack extends Container {
 		contents.put(item.getID(), sameIDItems);
 	}
 	
+	/**
+	 * Removes an item and its references from the contents of this backpack. Drops it
+	 * to the ground.
+	 * @param item
+	 */
 	public void removeFromContents(Item item){
 		ArrayList<Item> sameIDItems = contents.get(item.getID());
 		sameIDItems.remove(item);
@@ -191,6 +213,12 @@ public class Backpack extends Container {
 		item.setHolder(null);
 	}
 	
+	/**
+	 * Checks if the item exists in the backpack
+	 * @param item
+	 * 		The item to be searched for
+	 * @return whether the item exists
+	 */
 	public boolean hasAsContent(Item item){
 		ArrayList<Item> sameIDItems = contents.get(item.getID());
 		if(sameIDItems == null) return false;
@@ -202,6 +230,11 @@ public class Backpack extends Container {
 	/************************************************
 	 * Holder
 	 ************************************************/
+	
+	/**
+	 * Sets the holder of the backpack and all of its content to holder
+	 * @effect All holders are set to holder.
+	 */
 	
 	@Override
 	public void setHolder(Mobile holder){
@@ -217,10 +250,14 @@ public class Backpack extends Container {
 	 ************************************************/
 	
 	/**
-	 * 
+	 * Transfer the item to the given backpack
 	 * @param item
+	 * 		The item to be transferred.
 	 * @param backpack
+	 * 		The target backpack.
 	 * @throws ItemTransferException
+	 * 		If the item does not exist in the backpack or if the target
+	 * 		backpack cannot accept this item, an exception is thrown.
 	 */
 	
 	public void transferItemTo(Item item, Backpack other) throws ItemTransferException,InvalidContentException{
@@ -240,8 +277,15 @@ public class Backpack extends Container {
 	 * Capacity
 	 ************************************************/
 
+	/**
+	 * The maximum weight of the contents in this backpack.
+	 */
 	private final Weight capacity;
 
+	/**
+	 * Returns the capacity of this backpack
+	 * @return
+	 */
 	public Weight getCapacity() {
 		return this.capacity;
 	}
