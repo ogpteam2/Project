@@ -21,4 +21,15 @@ public class Weapon extends Item {
 	public int getDamage(){
 		return this.damage;
 	}
+	
+	public void setDamage(int damage){
+		assert canHaveAsDamage(damage);
+		this.damage = damage;
+	}
+	
+	public boolean canHaveAsDamage(int damage){
+		boolean divisibleBySeven = (damage%7==0);
+		boolean withinRange = (damage > 0 && damage < 101);
+		return divisibleBySeven && withinRange;
+	}
 }
