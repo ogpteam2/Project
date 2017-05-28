@@ -34,6 +34,7 @@ public class HeroTest {
 		Weight weight = new Weight(BigDecimal.TEN,Unit.kg);
 		DucatAmount value = new DucatAmount();
 		armor = new Armor(weight,value,10,ArmorType.STANDARD);
+		armor.setCurrentProtection(50);
 		itemsNormal.put(Anchorpoint.BODY, armor);
 		
 		//weapon
