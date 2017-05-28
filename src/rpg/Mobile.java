@@ -7,6 +7,7 @@ import java.util.regex.*;
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
 import rpg.inventory.Item;
+import rpg.exception.InvalidContentException;
 import rpg.inventory.*;
 import rpg.utility.PrimeGenerator;
 import java.math.*;
@@ -27,6 +28,8 @@ import rpg.value.*;
  * @invar Each mobile can have each of its items at its anchorpoints.
  *        | for each I in anchorpoints:
  *        | 	canHaveAsItemAt(getItemAt(I))
+ * @invar Each mobile should have valid anchorpoints
+ *        | isValidEnumMap(getAnchorpoints())
  * @author Robbe, Elias
  * @version 1.0
  *
@@ -308,6 +311,9 @@ abstract public class Mobile {
 		return rawProtection;
 	}
 	
+	/**
+	 * Returns the total protection of the mobile.
+	 */
 	public abstract long getTotalProtection();
 	
 	/**
@@ -405,11 +411,33 @@ abstract public class Mobile {
 	 * 		   | result == (item instanceof Purse) && (anchorpoint.getAnchorpoint()!="BELT")
 	 * @return True otherwise.
 	 */   
-	public static boolean isValidItemAt(Item item,Anchorpoint anchorpoint){
+	public boolean isValidItemAt(Item item,Anchorpoint anchorpoint){
 		if (anchorpoint == null)
 			return false;
 		if ( (item instanceof Purse) && (anchorpoint.getAnchorpoint()!="BELT"))
 			return false;
+		return true;
+	}
+	
+	/**
+	 * Checks whether the anchorpoints are valid.
+	 * 
+	 * @param items
+	 * 		  The anchorpoints to check.
+	 * @return True iff each item in the anchorpoints is a valid one 
+	 * 		   for the anchorpoint.
+	 * 		   | for Items, Anchorpoints in anchorpoints
+	 * 		   | 	if for one or more (!isValidItemAt(entry.getValue(),entry.getKey()))
+	 * 		   |		result == false
+	 * 	       | 	else 
+	 * 		   |		result == true
+	 */	    
+	public boolean isValidEnumMap(EnumMap<Anchorpoint,Item> items){
+		for (EnumMap.Entry<Anchorpoint, Item> entry : items.entrySet()){
+			if(!isValidItemAt(entry.getValue(),entry.getKey())){
+				return false;
+			}
+		}
 		return true;
 	}
 	
@@ -582,11 +610,12 @@ abstract public class Mobile {
 	 * 
 	 * @param other
 	 * 		  The other mobile to hit.
+	 * @throws InvalidContentException 
 	 * @effect The other mobile is damaged with the calculated damage of the mobile
 	 * 		   if the random number created is greater than the others procection.
 	 * 		   |
 	 */
-	public void hit(Mobile other){
+	public void hit(Mobile other) throws InvalidContentException{
 		int randomNum = randomZeroToHundred();
 		if (other.isHigherThanProtection(randomNum,other)){
 			int damage = calculateDamage();
@@ -594,6 +623,7 @@ abstract public class Mobile {
 			if (other.getCurrentHitpoints() == 0 ){
 				this.heal();
 				this.collectTreasures(other);
+				other.setIsDead(true);
 			}
 		}
 	}
@@ -668,7 +698,43 @@ abstract public class Mobile {
 	 * 
 	 * @param other
 	 * 		 The other mobile to collect items from.
+	 * @throws InvalidContentException 
 	 */
-	protected abstract void collectTreasures(Mobile other);
-
+	protected abstract void collectTreasures(Mobile other)
+			throws InvalidContentException;
+	
+	/************************************************
+	 * dead
+	 ************************************************/
+	/**
+	 * Returns whether the mobile is alive or not.
+	 */
+	public boolean getIsDead(){
+		return this.isDead;
+	}
+	
+	/**
+	 * Sets the dead  status of the mobile.
+	 * @param dead
+	 * 		  The new dead status of the mobile.
+	 * @post If the given boolean is false, all its items are removed.
+	 * 		 | if (dead == false)
+	 * 		 | 		for anchorpoint in anchorpoints:
+	 * 	     |			removeItemAt(anchorpoint)
+	 */
+	public void setIsDead(boolean dead){
+		this.isDead = dead;
+		if (dead == false){
+			for (EnumMap.Entry<Anchorpoint, Item> entry : this.getAnchorpoints().entrySet()){
+				this.removeItemAt(entry.getKey());
+			}
+		}
+		
+	}
+	
+	/**
+	 * A variable referencing the dead status of the mobile.
+	 */
+	private boolean isDead = false;
+	
 }
