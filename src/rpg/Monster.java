@@ -204,7 +204,7 @@ public class Monster extends Mobile {
 	 * 		   | result.equals((int)(getTotalStrength()-10)/2)
 	 */
 	@Override
-	protected int calculateDamage(){
+	public int calculateDamage(){
 		return (int)(getTotalStrength()-10)/2;
 	}
 	
