@@ -12,17 +12,17 @@ import rpg.value.Weight;
 abstract public class Item {
 	
 	public Item(Weight weight, DucatAmount value){
+		this(weight);
+		setValue(value);
+	}
+	
+	public Item(Weight weight){
 		ID = generateID();
 		if(isValidWeight(weight)){
 			this.weight = weight;
 		} else {
 			this.weight = new Weight(BigDecimal.ZERO);
 		}
-		setValue(value);
-	}
-	
-	public Item(Weight weight){
-		this(weight, new DucatAmount(BigDecimal.ZERO));
 	}
 	
 	/************************************************
