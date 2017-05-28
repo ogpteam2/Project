@@ -7,8 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 import be.kuleuven.cs.som.annotate.*;
 import rpg.exception.InvalidContentException;
 import rpg.inventory.*;
@@ -17,6 +16,9 @@ import rpg.value.Unit;
 import rpg.value.Weight;
 import java.math.*;
 /**
+ * A class of heroes.
+ * 
+ * No new invars imposed.
  * 
  * @author Robbe, Elias
  *
@@ -26,7 +28,24 @@ public class Hero extends Mobile {
 	/************************************************
 	 * Constructors
 	 ************************************************/
-	
+	/**
+	 * Initialize a new hero with given name, hitpoints, strength and items.
+	 * 
+	 * @param name
+	 * 	     The name of the hero.
+	 * @param hitpoints
+	 * 		  The maximum and current hitpoints of the hero.
+	 * @param strength
+	 * 		  The strength of the hero.
+	 * @param items
+	 * 		  The items to initialize the hero.
+	 * @effect  The anchorpoints of the hero are set with the given items.
+	 * 	      | for item in items
+	 * 		  | 	setItemAt(item,anchorpoint)
+	 * @throws IllegalArgumentException
+	 * 		   The hero is not initialized with armor
+	 * 		   | !(items.get(Anchorpoint.BODY) instanceof Armor)
+	 */
 	public Hero(String name,long hitpoints, BigDecimal strength,
 			EnumMap<Anchorpoint,Item> items) 
 			throws IllegalArgumentException 
@@ -50,6 +69,35 @@ public class Hero extends Mobile {
 		
 	}
 
+	/**
+	 * Initialized a hero with a name, two hitpoints, zero strength 
+	 * and a standard armorpiece.
+	 * 
+	 * @param name
+	 * 		  The name of the hero.
+	 * @effect The new hero is initialized with standard armor.
+	 * 		   | this(name,0L,BigDecimal.ZERO,initializeStandardArmor())
+	 */
+	public Hero(String name){
+		this(name,2,BigDecimal.ZERO,initializeStandardArmor());
+	}
+	
+	/**
+	 * Creates a EnumMap to initialize a standardArmor. 
+	 * The standard armor has zero weight, zero protection, zero value and is standard.
+	 * 
+	 * @return	An EnumMap with an armor inside.
+	 * 	        | result == Enumap(Anchorpoint.BODY, standardArmor)
+	 */
+	@Model
+	private static EnumMap<Anchorpoint,Item> initializeStandardArmor(){
+		EnumMap<Anchorpoint,Item> map = new EnumMap<Anchorpoint,Item>(Anchorpoint.class);
+		Armor standardArmor = new Armor(Weight.kg_0,
+				new DucatAmount(BigDecimal.ZERO),1,ArmorType.STANDARD);
+		map.put(Anchorpoint.BODY, standardArmor);
+		return map;
+	}
+	
 	/************************************************
 	 * Name
 	 ************************************************/
@@ -62,19 +110,28 @@ public class Hero extends Mobile {
 	 */
 	@Override
 	public boolean isValidName(String heroName){
-		boolean nameIsValid = pattern.matcher(heroName).matches();
-		int numberOfApos = getNumberOfMataches(patternApo,heroName);
+		boolean nameIsValid = firstPattern.matcher(heroName).matches();
+		int numberOfApos = getNumberOfMatches(patternApo,heroName);
 		boolean colonNotSpace = patternColonSpace.matcher(heroName).matches();
-		return nameIsValid && numberOfApos<=2 && !colonNotSpace;
+		return  nameIsValid && numberOfApos<=2 && !colonNotSpace;
 	}
 	
 	/**
+	 * Gets the number of matches with a given pattern.
 	 * 
 	 * @param pattern
+	 * 		  The pattern to check the string against.
 	 * @param string
-	 * @return
+	 * 		  The string to check against the pattern.
+	 * @return The number of matches.
+	 * 	       | let count = 0
+	 * 		   | 	matcher = pattern.matcher(string)
+	 * 	       | 	while (matcher.find())
+	 *	       |		count++
+	 *		   | result.equals(count) 
+	 *
 	 */
-	private int getNumberOfMataches(Pattern pattern, String string){
+	private int getNumberOfMatches(Pattern pattern, String string){
 		int count = 0;
 		Matcher matcher = pattern.matcher(string);
 		while (matcher.find())
@@ -83,17 +140,17 @@ public class Hero extends Mobile {
 	}
 	
 	/**
-	 * 
+	 * The first pattern to check the name against.
 	 */
-	private final Pattern pattern = Pattern.compile("[A-Z][:'A-Za-z\\s]*");
+	private static final Pattern firstPattern = Pattern.compile("[A-Z][:'A-Za-z\\s]+");
 	/**
-	 * 
+	 * The second pattern to check the name against.
 	 */
-	private final Pattern patternApo = Pattern.compile("'");
+	private static final Pattern patternApo = Pattern.compile("'");
 	/**
-	 * 
+	 * The third pattern to check the name against.
 	 */
-	private final Pattern patternColonSpace = Pattern.compile(":^\\s");
+	private static final Pattern patternColonSpace = Pattern.compile(":^\\s");
 	
 	
 	/************************************************
@@ -101,7 +158,20 @@ public class Hero extends Mobile {
 	 ************************************************/
 	
 	/**
-	 * Gives the capacity in kg.
+	 * Return the capacity of this hero in kg.
+	 * 
+	 * @return Zero if strength is zero or less.
+	 * 		   | if (this.getRawStrength().compareTo(BigDecimal.ZERO) == -1 || 
+	 *		   | this.getRawStrength().compareTo(BigDecimal.ZERO) == 0)
+	 *		   | 	result == 0kg
+	 * @return Strength multiplied with 10 if strength between 1 and 10.
+	 * 		   | if (this.getRawStrength().compareTo(BigDecimal.ONE) == 1 &&
+	 *		   | 	this.getRawStrength().compareTo(BigDecimal.TEN) == -1)
+	 *		   | 	result == this.getRawStrength().multiply(BigDecimal.TEN)
+	 * @return getCapacityByStrengthBetweenTenAndTwenty if between 10 and 20
+	 * 		   | result == getCapacityByStrengthBetweenTenAndTwenty()
+	 * @return getCapacityByStrengthAboveTwenty(getRawStrength())
+	 * 		   | getCapacityByStrengthAboveTwenty(getRawStrength())
 	 */
 	public Weight getCapacity(){
 		BigDecimal calculatedCapacity;
@@ -120,9 +190,21 @@ public class Hero extends Mobile {
 		return new Weight(calculatedCapacity,Unit.kg);
 	}
 	
-	
+	/**
+	 * A variable storing the availableCapacities if strength is between 10 and 20.
+	 */
 	private Map<BigDecimal, BigDecimal> availableCapacities;
 	
+	/**
+	 * Initializes the capacities for values of strength between 10 and 20.
+	 * 
+	 * @post Puts the values with corresponding weights in availableCapacities.
+	 * 		| for I in 1...10
+	 * 	    | 	 availableCapacities.put(BigDecimal.valueOf(value), 
+	 * 		|		BigDecimal.valueOf(corresponding));
+	 * 
+	 */
+	@Model
 	private void initializeAvailableCapacities(){
 		availableCapacities = new HashMap<BigDecimal, BigDecimal>();
 		availableCapacities.put(BigDecimal.valueOf(11), BigDecimal.valueOf(115));
@@ -137,6 +219,18 @@ public class Hero extends Mobile {
 		availableCapacities.put(BigDecimal.valueOf(20), BigDecimal.valueOf(400));
 	}
 	
+	/**
+	 * Gets the capacities if strength is between 10 than 20.
+	 * 
+	 * @param strength
+	 * 	     The strength.
+	 * @return The capactity with the corresponding value of availableCapacities.
+	 * 		   | let capacity = BigDecimal.ZERO
+	 * 		   | 			for (Map.Entry<BigDecimal, BigDecimal> entry : availableCapacities.entrySet()){
+	 *		   |				if (strength.compareTo(entry.getKey()) == -1)
+	 *		   |					capacity = entry.getValue();
+	 *		   | result == capacity.
+	 */
 	private BigDecimal getCapacityByStrengthBetweenTenAndTwenty(BigDecimal strength){
 		BigDecimal capacity = BigDecimal.ZERO;
 		for (Map.Entry<BigDecimal, BigDecimal> entry : availableCapacities.entrySet()){
@@ -146,6 +240,18 @@ public class Hero extends Mobile {
 		return capacity;
 	}
 	
+	/**
+	 * Gets the capacities if strength is higher than 20.
+	 * 
+	 * @param strength
+	 * 		  The strength to get the capacity from.
+	 * @return the capacity of ten units less multiplied with four.
+	 * 		  | let pow = strength.min(BigDecimal.TEN).divideToIntegralValue(BigDecimal.TEN)
+	 * 		  | let strengthModTen = strength.remainder(BigDecimal.TEN).add(BigDecimal.TEN)
+	 * 		  | let baseResult = getCapacityByStrengthBetweenTenAndTwenty(strengthModTen)
+	 * 		  | let result = powerOfBigDecimal(BigDecimal.valueOf(4),pow)
+	 * 		  | result == result.multiply(baseResult)
+	 */
 	private BigDecimal getCapacityByStrengthAboveTwenty(BigDecimal strength){
 		BigDecimal pow = strength.min(BigDecimal.TEN).divideToIntegralValue(BigDecimal.TEN);
 		BigDecimal strengthModTen = strength.remainder(BigDecimal.TEN).add(BigDecimal.TEN); 
@@ -154,6 +260,21 @@ public class Hero extends Mobile {
 		return result.multiply(baseResult);
 	}
 	
+	/**
+	 * Return the power of a BigDecimal by iterating the multiplication.
+	 * 
+	 * @param bigdecimal
+	 * 	      The bigdecimal you want the power of.
+	 * @param power
+	 * 		  The power.
+	 * @return The bigdecimal^pow
+	 * 	      | let result = BigDecimal.ONE;
+	 * 		  | let i = BigDecimal.ZERO; 
+	 * 		  |	while (power.compareTo(i) == 1)
+	 *		  | 	result = result.multiply(bigdecimal);
+	 *		  | 	i.add(BigDecimal.ONE);
+	 * 		  | result == result
+	 */
 	private BigDecimal powerOfBigDecimal(BigDecimal bigdecimal,BigDecimal power){
 		BigDecimal result = BigDecimal.ONE;
 		BigDecimal i = BigDecimal.ZERO; 
@@ -168,6 +289,15 @@ public class Hero extends Mobile {
 	 * Protection
 	 ************************************************/
 	
+	/**
+	 * Return the total protection of the hero.
+	 * 
+	 * @return The total protection.
+	 * 	       | let result = getRawProtection()
+	 * 		   | if (getItemAt(Anchorpoint.BODY) != null)
+	 *		   |	result = result + ((Armor)getItemAt(Anchorpoint.BELT)).getCurrentProtection()
+	 * 		   | result == result
+	 */
 	public long getTotalProtection(){
 		int result = getRawProtection();
 		if (getItemAt(Anchorpoint.BODY) != null){
@@ -175,29 +305,49 @@ public class Hero extends Mobile {
 		}
 		return result;
 	}
-	
 
-
-	
 	/************************************************
 	 * Hit
 	 ************************************************/
 	
+	/**
+	 * Return the total strength.
+	 * @return The total strength.
+	 * 	       | let result = this.getRawStrength()
+	 *         | if (getItemAt(Anchorpoint.LEFT) instanceof Weapon)
+	 *		   |	result += ((Weapon)getItemAt(Anchorpoint.LEFT)).getStrength();
+	 *		   | if (getItemAt(Anchorpoint.RIGHT) instanceof Weapon)
+	 *		   |	result += ((Weapon)getItemAt(Anchorpoint.RIGHT)).getStrength();
+	 * 		   | result == result
+	 */	   
 	protected int getTotalStrength(){
 		int result = this.getRawStrength().intValue();
 		if (getItemAt(Anchorpoint.LEFT) instanceof Weapon)
-			result += ((Weapon)getItemAt(Anchorpoint.LEFT)).getStrength();
+			result += ((Weapon)getItemAt(Anchorpoint.LEFT)).getDamage();
 		if (getItemAt(Anchorpoint.RIGHT) instanceof Weapon)
-			result += ((Weapon)getItemAt(Anchorpoint.RIGHT)).getStrength();
+			result += ((Weapon)getItemAt(Anchorpoint.RIGHT)).getDamage();
 		return result;
 	}
 	
-	
+	/**
+	 * Calculates the total damage of the hero.
+	 * 
+	 * @return The total damage.
+	 * 		   | result.equals((getTotalStrength()-10)/2)
+	 */
 	@Override
 	protected int calculateDamage(){
 		return (int)(getTotalStrength()-10)/2;
 	}
 	
+	/**
+	 * Heals the hero for a given amount.
+	 * 
+	 * @effect Heals the hero.
+	 * 	      | let random = randomZeroToHundred()/100	
+	 * 		  | difference = this.getMaximumHitpoints() - this.getCurrentHitpoints()
+	 * 	      | setCurrentHitpoints((int)(difference*random))
+	 */
 	@Override
 	protected void heal(){
 		double random = randomZeroToHundred()/100;
@@ -205,6 +355,25 @@ public class Hero extends Mobile {
 		setCurrentHitpoints((int)(difference*random));
 	}
 	
+	/**
+	 * Collects treasures from a monster if the monster is dead.
+	 * 
+	 * @param other
+	 * 		  The other mobile that is killed.
+	 * @effect The hero collects a random number of treasures and puts them
+	 * 		   in his backpack.
+	 * 		   | let random = ThreadLocalRandom.current().
+	 * 		   |	nextInt(0, other.getNbAnchorpoints() + 1)
+	 * 		   | let otherAnchorpoints = other.getAnchorpoints()
+	 * 		   | let I = 0
+	 * 		   | for entries in otherAnchorpoints
+	 * 		   | 	if (i>random)
+	 * 		   |		break
+	 * 		   | 	if (this.getItemAt(Anchorpoint.BACK) instanceof Backpack)
+	 * 		   | 		try
+	 * 		   |    		((Backpack)this.getItemAt(Anchorpoint.BACK)).addToContents(entry.getValue())
+	 * 		   |        catch 	(InvalidContentException) print("Contens cannot be added to backpack.")
+	 */
 	@Override
 	protected void collectTreasures(Mobile other)
 			throws InvalidContentException
@@ -225,10 +394,6 @@ public class Hero extends Mobile {
 				}
 			i++;
 		}
-		
-		
-
-		
 	}
 	
 	

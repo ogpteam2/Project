@@ -66,10 +66,7 @@ abstract public class Mobile {
 	 */
 	public Mobile(String name,long hitpoints, BigDecimal strength) 
 	{
-		assert isValidName(name);
-		assert isValidMaximumHitpoints(hitpoints);
-		assert canHaveAsCurrentHitpoints(hitpoints);
-		
+		assert isValidName(name);		
 		this.setName(name);
 		this.setMaximumHitpoints(hitpoints);
 		this.setCurrentHitpoints(hitpoints);
@@ -169,7 +166,7 @@ abstract public class Mobile {
 	 * 		   | result == (hitpoints<=this.getMaximumHitpoints() && hitpoints>0)
 	 */
 	public boolean canHaveAsCurrentHitpoints(long hitpoints){
-		return (hitpoints<=this.getMaximumHitpoints() && hitpoints>=0);
+		return hitpoints<=this.getMaximumHitpoints() && hitpoints>=0;
 	}
 	
 

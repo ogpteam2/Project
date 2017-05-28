@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
+import be.kuleuven.cs.som.annotate.*;
 import rpg.exception.InvalidContentException;
 import rpg.inventory.Anchorpoint;
 import rpg.inventory.Armor;
@@ -17,8 +18,48 @@ import rpg.inventory.Weapon;
 import rpg.value.Unit;
 import rpg.value.Weight;
 
+/**
+ * A class of monsters.
+ * 
+ * No new invars imposed.
+ * 
+ * @author Robbe, Elias
+ *
+ */
 public class Monster extends Mobile {
-
+	
+	/**
+	 * Initialiazes a new monster with given name, hitpoints, strength, a weapon
+	 * as claws and an armor as skin and an map of items.
+	 * 
+	 * @param name
+	 * 	      The new name.
+	 * @param hitpoints
+	 * 	      The new current and maximum Hitpoints.
+	 * @param strength
+	 * 	      The new Strength.
+	 * @param claws
+	 * 	      The new Claws.
+	 * @param skin
+	 * 	      The new skin.
+	 * @param items
+	 * 		  The items that the monster may possibly wear.
+	 * @post the skin is set to the given skin
+	 * 		 | this.skin = skin
+	 * @post the claws is set to the given claws.
+	 * 		 | this.claws = claws
+	 * @effect A random number of anchorpoints are valid for the monster.
+	 * 	    | let valid = new ArrayList<Anchorpoint>()
+	 * 		| for (Anchorpoint anchorpoint: Anchorpoint)
+	 * 		| 	valid.add(Anchorpoint(anchorpoint)) 
+	 * 	    | let random = ThreadLocalRandom.current().nextInt(0, 6);
+	 * 	    | let ableToSet = valid.subList(0, random+1)
+	 * 		| this.setValidAnchorpoints(ableToSet)
+	 * @effect The items that can be set on a anchorpoint are set.	
+	 * 		  |  for (EnumMap.Entry<Anchorpoint, Item> entry : items.entrySet()){
+	 *		  |		if (ableToSet.contains(entry.getKey()))
+	 *		  |			setItemAt(entry.getValue(),entry.getKey())
+	 */	
 	public Monster(String name,long hitpoints, BigDecimal strength,
 			Weapon claws, Armor skin,EnumMap<Anchorpoint,Item> items) 
 			throws IllegalArgumentException 
@@ -39,7 +80,6 @@ public class Monster extends Mobile {
 			if (ableToSet.contains(entry.getKey()))
 				setItemAt(entry.getValue(),entry.getKey());
 		}
-		
 	}
 	
 	
@@ -59,13 +99,23 @@ public class Monster extends Mobile {
 		
 	}
 	
-	
+	/**
+	 * A pattern with the valid name pattern for a monster.
+	 */
 	private final Pattern pattern = Pattern.compile("['A-Za-z\\s]+");
 	
 	/************************************************
 	 * Capacity
 	 ************************************************/
 	
+	/**
+	 * Return the total capacity of the monster.
+	 * 
+	 * @return The total capacity of the monster.
+	 * 	       | let strength = this.getRawStrength()
+	 * 	       | let result = strength.multiply(BigDecimal.valueOf(9))
+	 * 	       | result == new Weigth(result,Unit.kg)
+	 */
 	public Weight getCapacity(){
 		BigDecimal strength = this.getRawStrength();
 		BigDecimal result = strength.multiply(BigDecimal.valueOf(9));
@@ -76,22 +126,38 @@ public class Monster extends Mobile {
 	 * Protection And Damage
 	 ************************************************/
 	
-	
+	/**
+	 * Returns the total protection
+	 */
+	@Basic @Raw
 	public long getTotalProtection(){
 		return getSkin().getCurrentProtection();
 	}
 	
-	
+	/**
+	 * Returns the skin.
+	 */
+	@Basic @Raw
 	public Armor getSkin(){
 		return this.skin;
 	}
 	
-	public Claws getClaws(){
+	/**
+	 * Returns the claws.
+	 */
+	@Basic @Raw
+	public Weapon getClaws(){
 		return this.claws;
 	}
-
+	
+	/**
+	 * A variable referencing the skin of this monster.
+	 */
 	private Armor skin;
 	
+	/**
+	 * A variable referencing the claws of this monster.
+	 */
 	private Weapon claws;
 	
 	/************************************************
@@ -109,6 +175,7 @@ public class Monster extends Mobile {
 	 *		   | result == (anchorpoint == null)
 	 * @return True otherwise.
 	 */   
+	@Override
 	public boolean isValidItemAt(Item item,Anchorpoint anchorpoint){
 		if (anchorpoint == null)
 			return false;
@@ -119,20 +186,49 @@ public class Monster extends Mobile {
 	 * Hit
 	 ************************************************/
 	
+	/**
+	 * Gets the total strength of this a monter.
+	 * @return The total strength of the monser.
+	 * 		   | let result = this.getRawStrength().intValue()
+	 * 	       | result == getClaws().getStrength() + result
+	 */
 	protected int getTotalStrength(){
 		int result = this.getRawStrength().intValue();
 		return getClaws().getStrength() + result;
 	}
 	
-
+	/**
+	 * Calculates the damage of a monster.
+	 * 
+	 * @return The damage.
+	 * 		   | result.equals((int)(getTotalStrength()-10)/2)
+	 */
 	@Override
 	protected int calculateDamage(){
 		return (int)(getTotalStrength()-10)/2;
 	}
 	
+	/**
+	 * Heals the monster for nothing.
+	 */
 	@Override
 	protected void heal(){}
 	
+	/**
+	 * Collects treasures if a monster kills another monster or hero.
+	 * 
+	 * @param other
+	 * 		  The other mobile.
+	 * @effect The monster switches a random number of his items with the dead other.
+	 * 		  | let random = ThreadLocalRandom.current().nextInt(0, other.getNbAnchorpoints() + 1)
+	 * 	      | let otherAnchorpoints = other.getAnchorpoints()
+	 * 	      | let i = 0
+	 * 		  | for (EnumMap.Entry<Anchorpoint, Item> entry : otherAnchorpoints.entrySet())		
+	 * 		  | 	if (i>random)
+	 * 		  | 		break
+	 * 		  |		else changeItem(entry.getValue(),entry.getKey())
+	 * 		  |	i++		
+	 */	
 	@Override
 	protected void collectTreasures(Mobile other)
 			throws InvalidContentException
@@ -154,6 +250,16 @@ public class Monster extends Mobile {
 		
 	}
 	
+	/**
+	 * Changes an item with the given item at given anchorpoint.
+	 * @param item
+	 * 		  The new item
+	 * @param anchorpoint
+	 * 	      The anchorpoint to set the new item.
+	 * @effect The old item is removed and the new is added.
+	 * 		   | this.removeItemAt(anchorpoint)
+	 *         | this.setItemAt(item, anchorpoint)
+	 */
 	private void changeItem(Item item, Anchorpoint anchorpoint)
 		throws IllegalArgumentException
 	{
