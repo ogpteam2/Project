@@ -175,17 +175,18 @@ public class Hero extends Mobile {
 	 */
 	public Weight getCapacity(){
 		BigDecimal calculatedCapacity;
-		if (this.getRawStrength().compareTo(BigDecimal.ZERO) == -1 || 
-				this.getRawStrength().compareTo(BigDecimal.ZERO) == 0)
+		BigDecimal rawStrength = this.getRawStrength();
+		if (rawStrength.compareTo(BigDecimal.ZERO) == -1 || 
+				rawStrength.compareTo(BigDecimal.ZERO) == 0)
 			calculatedCapacity = BigDecimal.ZERO;
-		if (this.getRawStrength().compareTo(BigDecimal.ONE) == 1 &&
-				this.getRawStrength().compareTo(BigDecimal.TEN) == -1)
-			calculatedCapacity = this.getRawStrength().multiply(BigDecimal.TEN);
-		if (this.getRawStrength().compareTo(BigDecimal.TEN) == 1 &&
-				this.getRawStrength().compareTo(BigDecimal.valueOf(20)) == -1)
+		else if(rawStrength.compareTo(BigDecimal.ONE) == 1 &&
+				rawStrength.compareTo(BigDecimal.TEN) == -1)
+			calculatedCapacity = rawStrength.multiply(BigDecimal.TEN);
+		else if(rawStrength.compareTo(BigDecimal.TEN) == 1 &&
+				rawStrength.compareTo(BigDecimal.valueOf(20)) == -1)
 			calculatedCapacity = getCapacityByStrengthBetweenTenAndTwenty(getRawStrength());
 		else{
-			calculatedCapacity =getCapacityByStrengthAboveTwenty(this.getRawStrength());
+			calculatedCapacity =getCapacityByStrengthAboveTwenty(rawStrength);
 		}
 		return new Weight(calculatedCapacity,Unit.kg);
 	}
@@ -301,7 +302,7 @@ public class Hero extends Mobile {
 	public long getTotalProtection(){
 		int result = getRawProtection();
 		if (getItemAt(Anchorpoint.BODY) != null){
-			result = result + ((Armor)getItemAt(Anchorpoint.BELT)).getCurrentProtection();
+			result = result + ((Armor)getItemAt(Anchorpoint.BODY)).getCurrentProtection();
 		}
 		return result;
 	}
@@ -336,8 +337,11 @@ public class Hero extends Mobile {
 	 * 		   | result.equals((getTotalStrength()-10)/2)
 	 */
 	@Override
-	protected int calculateDamage(){
-		return (int)(getTotalStrength()-10)/2;
+	public int calculateDamage(){
+		int damage = (int)(getTotalStrength()-10)/2;
+		if (damage>=0)
+			return damage;
+		return 0;
 	}
 	
 	/**

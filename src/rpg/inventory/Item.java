@@ -1,7 +1,6 @@
 package rpg.inventory;
 
 import java.math.BigDecimal;
-
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
@@ -13,17 +12,17 @@ import rpg.value.Weight;
 abstract public class Item {
 	
 	public Item(Weight weight, DucatAmount value){
+		this(weight);
+		setValue(value);
+	}
+	
+	public Item(Weight weight){
 		ID = generateID();
 		if(isValidWeight(weight)){
 			this.weight = weight;
 		} else {
 			this.weight = new Weight(BigDecimal.ZERO);
 		}
-		setValue(value);
-	}
-	
-	public Item(Weight weight){
-		this(weight, new DucatAmount(BigDecimal.ZERO));
 	}
 	
 	/************************************************
@@ -66,7 +65,7 @@ abstract public class Item {
 		return this.value;
 	}
 	
-	protected void setValue(DucatAmount value){
+	public void setValue(DucatAmount value){
 		assert canHaveAsValue(value);
 		this.value = value;
 	}
@@ -99,7 +98,7 @@ abstract public class Item {
 	private Container container = null;
 	
 	public void setContainer(Container container){
-		
+		this.container = container;
 	}
 	
 	public Container getContainer(){
@@ -108,8 +107,12 @@ abstract public class Item {
 	
 	public Mobile holder = null;
 	
-	protected void setHolder(Mobile holder){
-		
+	public void setHolder(Mobile holder){
+		this.holder = holder;
+	}
+	
+	public Mobile getHolder(){
+		return this.holder;
 	}
 	
 }

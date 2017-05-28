@@ -10,6 +10,13 @@ public class DucatAmount implements Comparable<DucatAmount> {
 
 	private static final Weight DUCAT_WEIGHT = new Weight(new BigDecimal(50),Unit.g);
 	
+	/**
+	 * Creates a new ducatamount of the given value.
+	 * @param amount
+	 * 			The value this ducatamount has to have.
+	 * @throws IllegalArgumentException
+	 * 			If the value is null an exception is thrown.
+	 */
 	public DucatAmount(BigDecimal amount) throws IllegalArgumentException {
 		if (amount == null)
 			throw new IllegalArgumentException();
@@ -17,32 +24,57 @@ public class DucatAmount implements Comparable<DucatAmount> {
 			this.amount = amount.setScale(2, RoundingMode.HALF_EVEN);
 	}
 
+	/**
+	 * Creates a ducatamount with a value of 1 ducat.
+	 */
 	public DucatAmount() {
 		this(BigDecimal.ONE);
 	}
 	
+	/**
+	 * Creates a ducatamount with a double as argument.
+	 * @param amount
+	 * 			The value this ducatamount has to have.
+	 */
 	public DucatAmount(double amount){
 		this(new BigDecimal(amount));
 	}
 	
+	/**
+	 * Creates a ducatamount with a int as argument.
+	 * @param amount
+	 * 			The value this ducatamount has to have.
+	 */
 	public DucatAmount(int amount){
 		this(new BigDecimal(amount));
 	}
-
+	
+	/**
+	 * 
+	 */
 	private final BigDecimal amount;
 	
-	public String toString() {
-		return (this.getValue().toString() + " ducats");
-	}
-
 	public BigDecimal getValue() {
 		return this.amount;
+	}
+	
+	/**
+	 * 
+	 * @return the string value of this object
+	 */
+	public String toString() {
+		return (this.getValue().toString() + " ducats");
 	}
 	
 	/******************************************
 	 * Weight
 	 ******************************************/
 
+	/**
+	 * Calculates the weight based on the amount of ducats in this value
+	 * and the weight of individual ducats.
+	 * @return the weight of this ducatamount
+	 */
 	public Weight getWeight(){
 		return DUCAT_WEIGHT.multiply(this.getValue());
 	}
@@ -82,15 +114,21 @@ public class DucatAmount implements Comparable<DucatAmount> {
 
 	public DucatAmount add(DucatAmount other) {
 		BigDecimal total = BigDecimal.ZERO;
-		total.add(this.getValue());
-		total.add(other.getValue());
+		total = total.add(this.getValue());
+		total = total.add(other.getValue());
 		return new DucatAmount(total);
 	}
 
+	/**
+	 * Subtracts the value of the 
+	 * @param other
+	 * @return
+	 * @throws ArithmeticException
+	 */
 	public DucatAmount subtract(DucatAmount other) throws ArithmeticException {
 		BigDecimal total = BigDecimal.ZERO;
-		total.add(this.getValue());
-		total.subtract(other.getValue());
+		total = total.add(this.getValue());
+		total = total.subtract(other.getValue());
 		if (total.signum() == -1)
 			throw new ArithmeticException("Cannot have a negative amount of ducats!");
 		else

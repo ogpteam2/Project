@@ -2,33 +2,60 @@ package rpg.inventory;
 
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
+
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import rpg.exception.InvalidContentException;
+import rpg.value.DucatAmount;
+import rpg.value.Weight;
 
 public class BackpackTest {
 	
-	public Backpack backpack1;
-	public Backpack backpack2;
+	public Backpack backpack;
+	public DucatAmount money;
+	public Weapon sword;
+	public Purse moneyBag;
+	public Armor chestPlate;
+	public Armor heavyArmor;
+	
+	public Weight standardWeight = new Weight(BigDecimal.ONE);
+	public Weight standardCap = new Weight(new BigDecimal(1000));
+	public DucatAmount standardValue = new DucatAmount(100);
+	
+	@Rule
+    public ExpectedException thrown = ExpectedException.none();
+
 	
 	@Before
 	public void setUp() {
-		backpack1 = new Backpack();
-		backpack2 = new Backpack();
+		backpack = new Backpack(standardWeight,standardCap);
+		money = new DucatAmount();
+		sword = new Weapon(standardWeight, 21);
+		moneyBag = new Purse(standardWeight);
+		chestPlate = new Armor(standardWeight,standardValue,100);
+		heavyArmor = new Armor(standardCap,standardValue,100);
+	}
+	
+	public void testAddItems() throws InvalidContentException{
+		backpack.addToContents(sword);
+		backpack.addToContents(moneyBag);
 	}
 	
 	@Test
-	public void idTest(){
-		assertFalse(backpack1.getID() == backpack2.getID());
+	public void addNullItem() throws InvalidContentException, NullPointerException{
+		thrown.expect(NullPointerException.class);
+		Item nullItem = null;
+		backpack.addToContents(nullItem);
 	}
 	
-	/**
-	 * Check if the idgenerator successfully resets upon encountering the last
-	 * element in the iterator. Testing of the iterator has shown it can generate
-	 * 64 unique id's, so id no 65 should be identical to id no 1.
-	 */
 	@Test
-	public void idGeneratorTest(){
-		for(int i = 0; i<62; i++) backpack2 = new Backpack();
-		assertTrue(backpack1.getID() == backpack2.getID());
+	public void addToHeavyItem() throws InvalidContentException{
+		thrown.expect(InvalidContentException.class);
+		backpack.addToContents(heavyArmor);
+		System.out.println(backpack.getWeightOfContents());
 	}
 }
