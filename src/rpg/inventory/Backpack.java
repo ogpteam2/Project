@@ -13,6 +13,13 @@ import rpg.utility.IDGenerator;
 import rpg.value.DucatAmount;
 import rpg.value.Weight;
 
+/**
+ * A class of backpacks.
+ * @invar The weight is always smaller than the capacity
+ * 		|!isOverCapacity(getWeightOfContents())
+ * @author Elias, Robbe
+ *
+ */
 public class Backpack extends Container {
 
 	
@@ -290,10 +297,20 @@ public class Backpack extends Container {
 		return this.capacity;
 	}
 	
+	/**
+	 * Checks whether with the given weight, the capacity would be exceeded. 
+	 * @param weight
+	 * 		Weight to check against
+	 * @return
+	 * 		Whether the capacity would be exceeded.
+	 */
 	private boolean isOverCapacity(Weight weight){
 		return this.getCapacity().compareTo(weight)==-1;
 	}
 
+	/**
+	 * Adds the ducatamount to the ducatcontent of the backpack
+	 */
 	@Override
 	public void addToContents(DucatAmount ducatAmount) {
 		if(canHaveAsDucatContent(ducatAmount)){
@@ -301,6 +318,13 @@ public class Backpack extends Container {
 		}
 	}
 	
+	/**
+	 * Checks if the backpack can store the ducatamount
+	 * @param content
+	 * 		the hypotetical ducatamount
+	 * @return
+	 * 		whether the ducatamount can be added.
+	 */
 	public boolean canHaveAsDucatContent(DucatAmount content){
 		Weight newWeight = new Weight();
 		newWeight = newWeight.add(getWeightOfItems());
