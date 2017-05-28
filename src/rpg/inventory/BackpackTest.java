@@ -7,10 +7,14 @@ import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+<<<<<<< HEAD
 import org.junit.rules.ExpectedException;
 
 import rpg.exception.InvalidContentException;
 import rpg.value.DucatAmount;
+=======
+
+>>>>>>> branch 'master' of https://github.com/ogpteam2/Project.git
 import rpg.value.Weight;
 
 public class BackpackTest {
@@ -30,8 +34,14 @@ public class BackpackTest {
     public ExpectedException thrown = ExpectedException.none();
 
 	
+	
+	
+	public Weight standardWeight = new Weight(BigDecimal.ONE);
+	public Weight standardCap = new Weight(new BigDecimal(100));
+	
 	@Before
 	public void setUp() {
+<<<<<<< HEAD
 		backpack = new Backpack(standardWeight,standardCap);
 		money = new DucatAmount();
 		sword = new Weapon(standardWeight, 21);
@@ -43,6 +53,10 @@ public class BackpackTest {
 	public void testAddItems() throws InvalidContentException{
 		backpack.addToContents(sword);
 		backpack.addToContents(moneyBag);
+=======
+		backpack1 = new Backpack(standardWeight,standardCap);
+		backpack2 = new Backpack(standardWeight,standardCap);
+>>>>>>> branch 'master' of https://github.com/ogpteam2/Project.git
 	}
 	
 	@Test
@@ -53,9 +67,18 @@ public class BackpackTest {
 	}
 	
 	@Test
+<<<<<<< HEAD
 	public void addToHeavyItem() throws InvalidContentException{
 		thrown.expect(InvalidContentException.class);
 		backpack.addToContents(heavyArmor);
 		System.out.println(backpack.getWeightOfContents());
+=======
+	public void idGeneratorTest(){
+		for(int i = 0; i<62; i++) backpack2 = new Backpack(standardWeight,standardCap);
+		assertTrue(backpack1.getID() == backpack2.getID());
+>>>>>>> branch 'master' of https://github.com/ogpteam2/Project.git
 	}
+	
+	@Test
+	public void 
 }

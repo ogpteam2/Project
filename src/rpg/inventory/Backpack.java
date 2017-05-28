@@ -37,6 +37,23 @@ public class Backpack extends Container {
 		return lowerRange && upperRange;
 	}
 
+	/************************************************
+	 * Value
+	 ************************************************/
+	
+	@Override
+	protected boolean canHaveAsValue(DucatAmount value) {
+		boolean lowerRange = value.compareTo(new DucatAmount(0)) == 1;
+		boolean upperRange = value.compareTo(new DucatAmount(500)) != 1;
+		return lowerRange && upperRange;
+	}
+
+	@Override
+	public DucatAmount getValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Override
 	public DucatAmount getValue() {
 		return this.getRawValue();
@@ -146,6 +163,7 @@ public class Backpack extends Container {
 	}
 	
 	/************************************************
+<<<<<<< HEAD
 	 * Holder
 	 ************************************************/
 	
@@ -159,6 +177,8 @@ public class Backpack extends Container {
 	}
 	
 	/************************************************
+=======
+>>>>>>> branch 'master' of https://github.com/ogpteam2/Project.git
 	 * Item transfer
 	 ************************************************/
 	
@@ -198,6 +218,7 @@ public class Backpack extends Container {
 
 	@Override
 	public void addToContents(DucatAmount ducatAmount) {
+<<<<<<< HEAD
 		if(canHaveAsDucatContent(ducatAmount)){
 			addToContents(ducatAmount);
 		}
@@ -208,6 +229,10 @@ public class Backpack extends Container {
 		newWeight = newWeight.add(getWeightOfItems());
 		newWeight = newWeight.add(content.getWeight());
 		return !isOverCapacity(newWeight);
+=======
+		// TODO Auto-generated method stub
+		
+>>>>>>> branch 'master' of https://github.com/ogpteam2/Project.git
 	}
 
 }

@@ -339,24 +339,37 @@ public class Hero extends Mobile {
 	@Override
 	public int calculateDamage(){
 		int damage = (int)(getTotalStrength()-10)/2;
+<<<<<<< HEAD
 		if (damage>=0)
 			return damage;
+=======
+		if (damage>=0){
+			return damage;
+		}
+>>>>>>> branch 'master' of https://github.com/ogpteam2/Project.git
 		return 0;
 	}
 	
 	/**
 	 * Heals the hero for a given amount.
 	 * 
-	 * @effect Heals the hero.
+	 * @effect Heals the hero if heal amount is not greater than current Hitpoints.
 	 * 	      | let random = randomZeroToHundred()/100	
 	 * 		  | difference = this.getMaximumHitpoints() - this.getCurrentHitpoints()
-	 * 	      | setCurrentHitpoints((int)(difference*random))
+	 *        | newHitpoints = (int)(this.getCurrentHitpoints() + (int)(difference*random)
+	 * 	      |  if (newHitpoints<this.getCurrentHitpoints())
+	 * 		  | 		setCurrentHitpoints()
+	 * 
+	 * 
 	 */
 	@Override
 	protected void heal(){
 		double random = randomZeroToHundred()/100;
 		long difference = this.getMaximumHitpoints() - this.getCurrentHitpoints();
-		setCurrentHitpoints((int)(difference*random));
+		int newHitpoints = (int)(this.getCurrentHitpoints() + (int)(difference*random));
+		if (newHitpoints<this.getCurrentHitpoints()){
+			setCurrentHitpoints(newHitpoints);
+		}	
 	}
 	
 	/**
