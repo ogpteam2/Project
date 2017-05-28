@@ -7,12 +7,18 @@ public class Weapon extends Item {
 	
 	private static WeaponIDGenerator idGenerator = new WeaponIDGenerator();
 	
-	public Weapon(double weight) {
+	public Weapon(double weight, int damage) {
 		super(weight);
 		// TODO Auto-generated constructor stub
 	}
 
 	protected IDGenerator getIDGenerator(){
 		return idGenerator;
+	}
+	
+	private int damage = 0;
+	
+	public int getDamage(){
+		return this.damage;
 	}
 }
