@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Map.Entry;
 
 public class BackpackEnumeration implements Enumeration<Item> {
@@ -15,6 +16,8 @@ public class BackpackEnumeration implements Enumeration<Item> {
 	}
 	
 	private Iterator<Entry<Long, ArrayList<Item>>> mapIterator = backpackContents.entrySet().iterator();
+	private Entry<Long, ArrayList<Item>> currentEntry = null;
+	private ListIterator<Item> entryIterator = null;
 	
 	@Override
 	public boolean hasMoreElements() {
@@ -24,8 +27,11 @@ public class BackpackEnumeration implements Enumeration<Item> {
 
 	@Override
 	public Item nextElement() {
-		// TODO Auto-generated method stub
-		return null;
+		if((entryIterator == null || !entryIterator.hasNext()) && mapIterator.hasNext()){
+			currentEntry  = mapIterator.next();
+			entryIterator = currentEntry.getValue().listIterator();
+		}
+		return entryIterator.next();
 	}
 
 }
