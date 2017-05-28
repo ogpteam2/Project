@@ -308,6 +308,8 @@ abstract public class Mobile {
 		return rawProtection;
 	}
 	
+	public abstract long getTotalProtection();
+	
 	/**
 	 * A variable referencing the rawProtection of the mobile.
 	 */
@@ -322,9 +324,12 @@ abstract public class Mobile {
 	 */
 	@Basic @Raw
 	public int getNbAnchorpoints(){
-		if (anchorpoints != null)
-			return anchorpoints.size();
-		return 0;
+		int result = 0;
+		for (EnumMap.Entry<Anchorpoint, Item> entry : anchorpoints.entrySet()){
+			if (entry.getValue() != null)
+				result++;
+		}
+		return result;
 	}
 	
 	/**
@@ -543,6 +548,21 @@ abstract public class Mobile {
 	}
 
 	/**
+	 * Sets the valid anchor points to the given list.
+	 */
+	public void setValidAnchorpoints(List<Anchorpoint> validAnchorpoints){
+		this.validAnchorpoints = validAnchorpoints;
+	}
+	
+	/**
+	 * Return the anchorpoints of this mobile.
+	 */
+	@Basic @Raw
+	protected EnumMap<Anchorpoint,Item> getAnchorpoints(){
+		return this.anchorpoints;
+	}
+	
+	/**
 	 * A variable referencing the anchor point with the corresponding Item.
 	 */
 	private EnumMap<Anchorpoint,Item> anchorpoints = new EnumMap<>(Anchorpoint.class);
@@ -596,10 +616,13 @@ abstract public class Mobile {
 	 * 		  The amount to check against the protection of the other mobile.
 	 * @param other
 	 * 		  The other mobile protection to check against the amount.
-	 * @return True or False
-	 * @note The implementation is worked out in each subclass.
+	 * @return True if this amount is higher than the total protection of the other.
+	 * 	       | result == amount > other.getTotalProtection()
 	 */
-	protected abstract boolean isHigherThanProtection(int amount, Mobile other);
+	protected boolean isHigherThanProtection(int amount, Mobile other){
+		return amount > other.getTotalProtection();
+			 
+	}
 	
 	/**
 	 * Calculates the damage that the mobile can hit.

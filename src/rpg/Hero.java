@@ -1,17 +1,21 @@
 package rpg;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import be.kuleuven.cs.som.annotate.*;
-import rpg.inventory.Anchorpoint;
-import rpg.inventory.Item;
+import rpg.exception.InvalidContentException;
+import rpg.inventory.*;
+import rpg.value.DucatAmount;
 import rpg.value.Unit;
 import rpg.value.Weight;
-
+import java.math.*;
 /**
  * 
  * @author Robbe, Elias
@@ -27,11 +31,21 @@ public class Hero extends Mobile {
 			EnumMap<Anchorpoint,Item> items) 
 			throws IllegalArgumentException 
 	{
-		
 		//assert isValidEnumMap(items);
 		super(name,hitpoints,strength);
+		List<Anchorpoint> validAnchorpoints = new ArrayList<Anchorpoint>();
+		validAnchorpoints.add(Anchorpoint.BACK);
+		validAnchorpoints.add(Anchorpoint.BELT);
+		validAnchorpoints.add(Anchorpoint.BODY);
+		validAnchorpoints.add(Anchorpoint.LEFT);
+		validAnchorpoints.add(Anchorpoint.RIGHT);
+		setValidAnchorpoints(validAnchorpoints);
 		initializeAvailableCapacities();
-		// set items of enummap to anchorpoints.
+		for (EnumMap.Entry<Anchorpoint, Item> entry : items.entrySet()){
+			setItemAt(entry.getValue(),entry.getKey());
+		}
+		
+		
 	}
 
 	/************************************************
@@ -152,18 +166,61 @@ public class Hero extends Mobile {
 	 * Protection
 	 ************************************************/
 	
-	public BigDecimal getTotalProtection(){
-		
+	public long getTotalProtection(){
+		int result = getRawProtection();
+		if (getItemAt(Anchorpoint.BODY) != null){
+			result = result + ((Armor)getItemAt(Anchorpoint.BELT)).getCurrentProtection();
+		}
+		return result;
+	}
+	
+	/************************************************
+	 * Hit
+	 ************************************************/
+	
+	protected int getTotalStrength(){
+		int result = this.getRawStrength().intValueExact();
+		if (getItemAt(Anchorpoint.LEFT) instanceof Weapon)
+			result += ((Weapon)getItemAt(Anchorpoint.LEFT)).getStrength();
+		if (getItemAt(Anchorpoint.RIGHT) instanceof Weapon)
+			result += ((Weapon)getItemAt(Anchorpoint.RIGHT)).getStrength();
+		return result;
 	}
 	
 	
+	@Override
+	protected int calculateDamage(){
+		return (int)(getTotalStrength()-10)/2;
+	}
 	
+	@Override
+	protected void heal(){
+		double random = randomZeroToHundred()/100;
+		long difference = this.getMaximumHitpoints() - this.getCurrentHitpoints();
+		setCurrentHitpoints((int)(difference*random));
+	}
 	
-	
-	
-	
-	
-	
+	@Override
+	protected void collectTreasures(Mobile other){
+		int random = ThreadLocalRandom.current().nextInt(0, other.getNbAnchorpoints() + 1);
+		EnumMap<Anchorpoint,Item> otherAnchorpoints = other.getAnchorpoints();
+		int i = 0;
+		for (EnumMap.Entry<Anchorpoint, Item> entry : otherAnchorpoints.entrySet()){
+			if (random>i){
+				break;
+			}
+			if (this.getItemAt(Anchorpoint.BACK) instanceof Backpack)
+				try{
+					((Backpack)this.getItemAt(Anchorpoint.BACK)).addToContents(entry.getValue());
+				}
+				catch (InvalidContentException ex){
+					System.out.println("Contens cannot be added to backpack.");
+				}
+			i++;
+		}
+
+		
+	}
 	
 	
 }
