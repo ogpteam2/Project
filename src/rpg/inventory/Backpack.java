@@ -14,12 +14,20 @@ import rpg.value.Weight;
 
 public class Backpack extends Container {
 
-	private static BinomialGenerator idGenerator = new BinomialGenerator();
-
+	
 	/************************************************
 	 * Constructors
 	 ************************************************/
 
+	/**
+	 * Creates a new backpack with the given parameters
+	 * @param weight
+	 * 			The weight of the backpack itself.
+	 * @param value
+	 * 			The value of the backpack itself.
+	 * @param capacity
+	 * 			The maximum value of the weight of the contents
+	 */
 	public Backpack(Weight weight, DucatAmount value, Weight capacity) {
 		super(weight,value);
 		this.capacity = capacity;
@@ -30,6 +38,9 @@ public class Backpack extends Container {
 	 * Value
 	 ************************************************/
 	
+	/**
+	 * Checks if the backpack can have this value.
+	 */
 	@Override
 	protected boolean canHaveAsValue(DucatAmount value) {
 		boolean lowerRange = value.compareTo(new DucatAmount(0)) == 1;
@@ -37,28 +48,44 @@ public class Backpack extends Container {
 		return lowerRange && upperRange;
 	}
 	
+	/**
+	 * Returns the value of the backpack itself
+	 */
 	@Override
 	public DucatAmount getValue() {
 		return this.getRawValue();
 	}
 	
+	/**
+	 * Returns the value of the backpack plus its contents
+	 * @return value of backpack and contents
+	 */
 	public DucatAmount getTotalValue(){
 		return this.getValue().add(this.getValueOfContents());
 	}
 	
+	/**
+	 * Calculates the value of the contents of the backpack.
+	 * @return the value of all the contents in the backpack
+	 */
 	public DucatAmount getValueOfContents(){
 		BackpackEnumeration it = this.getIterator();
 		DucatAmount value = new DucatAmount(BigDecimal.ZERO);
 		while(it.hasMoreElements()){
 			value = value.add(it.nextElement().getValue());
 		}
+		value = value.add(getDucatContent());
 		return value;
 	}
 	
 	/************************************************
-	 * Identification
+	 * Weight
 	 ************************************************/
 	
+	/**
+	 * Calculates the weight of the items in the backpack. 
+	 * @return
+	 */
 	public Weight getWeightOfItems(){
 		BackpackEnumeration it = this.getIterator();
 		Weight total = new Weight();
@@ -68,6 +95,9 @@ public class Backpack extends Container {
 		return total;
 	}
 	
+	/**
+	 * Returns the weight of all the contents in the backpack.
+	 */
 	@Override
 	public Weight getWeightOfContents() {
 		Weight total = new Weight();
@@ -79,7 +109,15 @@ public class Backpack extends Container {
 	/************************************************
 	 * Identification
 	 ************************************************/
-
+	
+	/**
+	 * The generator of id's for this class. Generates sequential binomial coefficients.
+	 */
+	private static BinomialGenerator idGenerator = new BinomialGenerator();
+	
+	/**
+	 * Returns the idgenerator for this class
+	 */
 	protected IDGenerator getIDGenerator() {
 		return idGenerator;
 	}
@@ -88,6 +126,10 @@ public class Backpack extends Container {
 	 * Iteration
 	 ************************************************/
 	
+	/**
+	 * Creates an instance of BackpackEnumeration for the contents of this backpack.
+	 * @return BackpackEnumeration for this backpack.
+	 */
 	public BackpackEnumeration getIterator(){
 		BackpackEnumeration it = new BackpackEnumeration(this.getContents());
 		return it;
@@ -97,12 +139,24 @@ public class Backpack extends Container {
 	 * Contents
 	 ************************************************/
 
+	/**
+	 * Hashmap with id as key, arraylist of items as value.
+	 * 
+	 * Using a hashmap for storing items with the same id makes locating these items 
+	 * happen in constant time.
+	 * Locating an item in the array of same id items happens in linear time.
+	 */
 	private HashMap<Long, ArrayList<Item>> contents;
 
+	/**
+	 * Returns the item storage construction for this backpack.
+	 * @return contents
+	 */
 	private HashMap<Long, ArrayList<Item>> getContents(){
 		return this.contents;
 	}
 	
+	/
 	public boolean canHaveAsContent(Item item) {
 		if(isOverCapacity(this.getWeightOfContents().add(item.getWeight()))){
 			return false;
