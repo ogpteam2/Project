@@ -38,6 +38,7 @@ abstract public class Mobile {
 	/************************************************
 	 * Constructors
 	 ************************************************/
+	
 	/**
 	 * Initialializes a new Mobile
 	 * 
@@ -57,7 +58,7 @@ abstract public class Mobile {
 	 * @effect The current- and maximum hitpoints is set to the given hitpoints.
 	 * 		   | this.setMaximumHitpoints(hitpoints)
 	 * 	       | this.setCurrentHitpoints(hitpoints)
-	 * @effect The strength is set to the given strenth.
+	 * @effect The rawStrength is set to the given strenth.
 	 *   	   | this.setRawStrength(strength)
 	 */
 	public Mobile(String name,long hitpoints, BigDecimal strength) 
@@ -71,29 +72,6 @@ abstract public class Mobile {
 		this.setCurrentHitpoints(hitpoints);
 		this.setRawStrength(strength);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/************************************************
 	 * Name - defensive programming
@@ -113,23 +91,11 @@ abstract public class Mobile {
 	 * @param name
 	 * 		  The name to be checked.
 	 * @return True if the given string is a valid name for the mobile.
-	 * @throws IllegalArgumentException
-	 * 		   This name that was given is not a valid name.
-	 * 		   | (name == null || !(getValidNamePattern.matcher(name).matches())  
+	 * @return False otherwise.
 	 * @note  The valid names will be decided in the each subclass .
 	 */
 	@Raw
-	abstract public boolean isValidName(String name) throws IllegalArgumentException;
-	
-
-	/**
-	 * A pattern which names of mobiles should be made of.
-	 * 
-	 * @return A pattern of acceptable characters for the name.
-	 * @note   This implementation is worked out in each subclass.
-	 */
-	@Raw @Immutable 
-	public abstract Pattern getValidNamePattern();
+	public abstract boolean isValidName(String name);
 	
 
 	/**
@@ -306,7 +272,6 @@ abstract public class Mobile {
 	 */
 	protected void setRawStrength(BigDecimal amount){
 		this.rawStrength = amount.setScale(rawStrengthPrecision, RoundingMode.HALF_UP);
-		setCapacity();
 	}
 	
 
@@ -326,28 +291,11 @@ abstract public class Mobile {
 	 ************************************************/
 	
 	/**
-	 * Return the capacity of this mobile.
+	 * Return the capacity of this mobile based on its strength.
 	 */
 	@Raw @Basic
-	public Weight GetCapacity(){
-		return this.capacity;
-	}
-	
-	/**
-	 * Sets the capacity of a mobile based on the raw strength.
-	 * 
-	 * @post The new capacity is set to a weight based on the raw strength.
-	 * @note The precise definition of this method is worked out in each subclass.
-	 */
-	protected abstract void setCapacity();
-	
-	
-	/**
-	 * A variable referencing the capacity of this mobile.
-	 */
-	private Weight capacity = new Weight(BigDecimal.ZERO);
-	
-	
+	public abstract Weight getCapacity();
+		
 	/************************************************
 	 * Protection
 	 ************************************************/
@@ -529,6 +477,7 @@ abstract public class Mobile {
 
 	/**
 	 * Checks whether the item can be set at the given anchor point.
+	 * 
 	 * @pre Everything should be in kg.
 	 * 		| getCapacityOfAnchorpoints().getUnit() == Unit.kg &&
 	 * 		| 	item.getWeigh().getUnit() == Unit.kg
@@ -548,7 +497,7 @@ abstract public class Mobile {
 		if (canHaveAsAnchorpoint(anchorpoint) && isValidItemAt(item,anchorpoint)){
 			Weight currentCapacityOfAnchorpoints =  getCapacityOfAnchorpoints();
 			if ((currentCapacityOfAnchorpoints.add(item.getWeight()))
-					.compareTo(GetCapacity()) == -1){
+					.compareTo(getCapacity()) == -1){
 				return true;
 			}
 		}
