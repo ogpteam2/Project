@@ -167,10 +167,18 @@ public class Armor extends Item {
 	 * Value
 	 ****************************************/
 	
+	/**
+	 * Checks if this is a valid value for the piece of armor
+	 * @return whether it is a valid value
+	 */
 	protected boolean canHaveAsValue(DucatAmount value){
 		return !value.isGreaterThan(new DucatAmount(1000));
 	}
 	
+	/**
+	 * Calculates the value of this piece of armor.
+	 * @return the value of this piece of armor
+	 */
 	public DucatAmount getValue(){
 		return this.getRawValue().multiply(this.getProcentualProtection());
 	}
