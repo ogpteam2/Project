@@ -31,8 +31,8 @@ public class Hero extends Mobile {
 			EnumMap<Anchorpoint,Item> items) 
 			throws IllegalArgumentException 
 	{
-		//assert isValidEnumMap(items);
 		super(name,hitpoints,strength);
+		assert isValidEnumMap(items);
 		List<Anchorpoint> validAnchorpoints = new ArrayList<Anchorpoint>();
 		validAnchorpoints.add(Anchorpoint.BACK);
 		validAnchorpoints.add(Anchorpoint.BELT);
@@ -44,7 +44,9 @@ public class Hero extends Mobile {
 		for (EnumMap.Entry<Anchorpoint, Item> entry : items.entrySet()){
 			setItemAt(entry.getValue(),entry.getKey());
 		}
-		
+		if (!(items.get(Anchorpoint.BODY) instanceof Armor)){
+			throw new IllegalArgumentException("A hero must be initialized with armor.");
+		}
 		
 	}
 
@@ -174,12 +176,15 @@ public class Hero extends Mobile {
 		return result;
 	}
 	
+
+
+	
 	/************************************************
 	 * Hit
 	 ************************************************/
 	
 	protected int getTotalStrength(){
-		int result = this.getRawStrength().intValueExact();
+		int result = this.getRawStrength().intValue();
 		if (getItemAt(Anchorpoint.LEFT) instanceof Weapon)
 			result += ((Weapon)getItemAt(Anchorpoint.LEFT)).getStrength();
 		if (getItemAt(Anchorpoint.RIGHT) instanceof Weapon)
@@ -201,12 +206,14 @@ public class Hero extends Mobile {
 	}
 	
 	@Override
-	protected void collectTreasures(Mobile other){
+	protected void collectTreasures(Mobile other)
+			throws InvalidContentException
+	{
 		int random = ThreadLocalRandom.current().nextInt(0, other.getNbAnchorpoints() + 1);
 		EnumMap<Anchorpoint,Item> otherAnchorpoints = other.getAnchorpoints();
 		int i = 0;
 		for (EnumMap.Entry<Anchorpoint, Item> entry : otherAnchorpoints.entrySet()){
-			if (random>i){
+			if (i>random){
 				break;
 			}
 			if (this.getItemAt(Anchorpoint.BACK) instanceof Backpack)
@@ -218,6 +225,8 @@ public class Hero extends Mobile {
 				}
 			i++;
 		}
+		
+		
 
 		
 	}
