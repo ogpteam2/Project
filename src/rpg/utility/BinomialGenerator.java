@@ -1,26 +1,47 @@
 package rpg.utility;
 
+
 import java.util.ArrayList;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
+/**
+ * A class that generates binomial numbers.
+ * 
+ * @author Robbe, Elias
+ *
+ */
 public class BinomialGenerator implements IDGenerator {
-
+	
+	/**
+	 * A variable storing the triangle of Pascal.
+	 */
 	private ArrayList<Long> pyramidRow;
 	
+	/**
+	 * The current value of the triangle of Pascal.
+	 */
 	private long currentValue;
+	/**
+	 * the current row of the triangle of Pascal.
+	 */
 	private int currentRowNum;
 	
 	/**
 	 * An iterator that calculates sequential binomial coefficients. These can be calculated as specified
-	 * by the assignment with factorials. However, factorials generate insanely large 
+	 * by the assignment with factorials. However, factorials generate insanely large
+	 * 
+	 * @post Makes a new BinomialGenerator.
+	 * 		 | reset()
 	 */
-	
 	public BinomialGenerator(){
 		reset();
 	}
 	
+	/**
+	 * Generates the next ID.
+	 */
 	public long generateID(){
 		if(!hasNextID()){
 			reset();
