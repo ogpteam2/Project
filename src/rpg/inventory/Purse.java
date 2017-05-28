@@ -80,5 +80,15 @@ public class Purse extends Container {
 	public DucatAmount getValue() {
 		return this.getDucatContent();
 	}
+	
+	@Override
+	public boolean canHaveAsContent(Item item) {
+		return false;
+	}
+
+	@Override
+	protected boolean canHaveAsValue(DucatAmount value) {
+		return false;
+	}
 
 }
