@@ -221,13 +221,8 @@ public class Monster extends Mobile {
 	 * @return The damage. | result.equals((int)(getTotalStrength()-10)/2)
 	 */
 	@Override
-<<<<<<< HEAD
-	public int calculateDamage(){
-		return (int)(getTotalStrength()-10)/2;
-=======
 	public int calculateDamage() {
 		return (int) (getTotalStrength() - 10) / 2;
->>>>>>> branch 'master' of https://github.com/ogpteam2/Project.git
 	}
 
 	/**

@@ -339,14 +339,9 @@ public class Hero extends Mobile {
 	@Override
 	public int calculateDamage(){
 		int damage = (int)(getTotalStrength()-10)/2;
-<<<<<<< HEAD
-		if (damage>=0)
-			return damage;
-=======
 		if (damage>=0){
 			return damage;
 		}
->>>>>>> branch 'master' of https://github.com/ogpteam2/Project.git
 		return 0;
 	}
 	
