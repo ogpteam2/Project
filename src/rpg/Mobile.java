@@ -3,7 +3,6 @@ package rpg;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.regex.*;
 import be.kuleuven.cs.som.annotate.*;
 import rpg.inventory.Anchorpoint;
 import rpg.inventory.Item;
@@ -554,6 +553,7 @@ abstract public class Mobile {
 		assert canHaveAsAnchorpoint(anchorpoint);
 		assert isValidItemAt(item,anchorpoint);
 		anchorpoints.put(anchorpoint, item);
+		item.setHolder(this);
 	}
 	
 	/**
@@ -568,8 +568,8 @@ abstract public class Mobile {
 	 */
 	public void removeItemAt(Anchorpoint anchorpoint){
 		Item item = anchorpoints.get(anchorpoint);
-		item.removeHolder();
 		anchorpoints.remove(anchorpoint);
+		item.setHolder(null);
 	}
 
 	/**

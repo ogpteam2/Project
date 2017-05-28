@@ -15,7 +15,7 @@ public class Armor extends Item {
 	
 	public Armor(Weight weight, 
 			DucatAmount maximumValue, 
-			int maximumProtection, 
+			int maximumProtection,
 			ArmorType type){
 		super(weight);
 		
