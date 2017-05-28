@@ -89,8 +89,8 @@ public class DucatAmount implements Comparable<DucatAmount> {
 
 	public DucatAmount subtract(DucatAmount other) throws ArithmeticException {
 		BigDecimal total = BigDecimal.ZERO;
-		total.add(this.getValue());
-		total.subtract(other.getValue());
+		total = total.add(this.getValue());
+		total = total.subtract(other.getValue());
 		if (total.signum() == -1)
 			throw new ArithmeticException("Cannot have a negative amount of ducats!");
 		else
