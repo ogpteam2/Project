@@ -82,8 +82,8 @@ public class DucatAmount implements Comparable<DucatAmount> {
 
 	public DucatAmount add(DucatAmount other) {
 		BigDecimal total = BigDecimal.ZERO;
-		total.add(this.getValue());
-		total.add(other.getValue());
+		total = total.add(this.getValue());
+		total = total.add(other.getValue());
 		return new DucatAmount(total);
 	}
 
