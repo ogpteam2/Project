@@ -16,35 +16,58 @@ import rpg.value.Weight;
 
 public class Game {
 
-	
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		Hero Jimmie;
-		Armor armor;
-		Weapon weapon;
-		
-		// enumMap with armor
-		EnumMap<Anchorpoint,Item> itemsNormal = new EnumMap<Anchorpoint,Item>(Anchorpoint.class);
-		Weight weight = new Weight(BigDecimal.TEN,Unit.kg);
+		Armor chestplate, chainmail;
+		Monster HillGiant;
+		Weapon claws, dagger, longSword;
+		Armor skin;
+
+		EnumMap<Anchorpoint, Item> itemsNormal = new EnumMap<Anchorpoint, Item>(Anchorpoint.class);
+		Weight weight = new Weight(BigDecimal.TEN, Unit.kg);
 		DucatAmount value = new DucatAmount(BigDecimal.TEN);
-		armor = new Armor(weight,value,10,ArmorType.STANDARD);
-		armor.setCurrentProtection(50);
-		itemsNormal.put(Anchorpoint.BODY, armor);
-		
-		Jimmie = new Hero("Jimmie",10L,BigDecimal.TEN,itemsNormal);
-		
+		chestplate = new Armor(weight, value, 10, ArmorType.STANDARD);
+		chestplate.setCurrentProtection(50);
+		itemsNormal.put(Anchorpoint.BODY, chestplate);
+		chainmail = new Armor(weight, value, 10, ArmorType.STANDARD);
+		chainmail.setCurrentProtection(50);
+		itemsNormal.put(Anchorpoint.LEFT, chainmail);
+		Jimmie = new Hero("Jimmie", 10L, BigDecimal.TEN, itemsNormal);
 		DucatAmount valueOfAnchor = new DucatAmount(BigDecimal.ZERO);
-		
-		for (EnumMap.Entry<Anchorpoint, Item> entry : Jimmie.getAnchorpoints().entrySet()){
-				Item item = entry.getValue();
-				DucatAmount amount = item.getValue();
-				System.out.println(amount);
-				valueOfAnchor = valueOfAnchor.add(amount);
-				System.out.println(valueOfAnchor);
-				
-				 
+		for (EnumMap.Entry<Anchorpoint, Item> entry : Jimmie.getAnchorpoints().entrySet()) {
+			Item item = entry.getValue();
+			DucatAmount amount = item.getValue();
+			valueOfAnchor = valueOfAnchor.add(amount);
 		}
 		System.out.println(valueOfAnchor);
-	}
 
+		skin = new Armor(weight, value, 10, ArmorType.STANDARD);
+		skin.setCurrentProtection(150);
+		claws = new Weapon(weight, 20);
+		EnumMap<Anchorpoint, Item> monsterItems = new EnumMap<Anchorpoint, Item>(Anchorpoint.class);
+		dagger = new Weapon(weight, 14);
+		longSword = new Weapon(weight, 21);
+		monsterItems.put(Anchorpoint.LEFT, dagger);
+		monsterItems.put(Anchorpoint.RIGHT, longSword);
+
+		HillGiant = new Monster("Bimmy", 100L, BigDecimal.TEN, claws, skin, monsterItems);
+		
+		DucatAmount valueOfMonster = new DucatAmount(BigDecimal.ZERO);
+		for (EnumMap.Entry<Anchorpoint, Item> entry : HillGiant.getAnchorpoints().entrySet()) {
+			Item item = entry.getValue();
+			DucatAmount amount = item.getValue();
+			valueOfMonster = valueOfMonster.add(amount);
+		}
+		System.out.println(valueOfMonster);
+		
+		// Battle
+		
+		
+		
+		
+		
+		
+		
+	}
 
 }

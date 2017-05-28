@@ -339,8 +339,9 @@ public class Hero extends Mobile {
 	@Override
 	public int calculateDamage(){
 		int damage = (int)(getTotalStrength()-10)/2;
-		if (damage>=0)
+		if (damage>=0){
 			return damage;
+		}
 		return 0;
 	}
 	

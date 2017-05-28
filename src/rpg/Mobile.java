@@ -580,6 +580,13 @@ abstract public class Mobile {
 	}
 	
 	/**
+	 * Returns the valid anchorpoints.
+	 */
+	public List<Anchorpoint> getValidAnchorpoints(){
+		return this.validAnchorpoints;
+	}
+	
+	/**
 	 * Return the anchorpoints of this mobile.
 	 */
 	@Basic @Raw
@@ -617,7 +624,8 @@ abstract public class Mobile {
 		if (other.isHigherThanProtection(randomNum,other)){
 			int damage = calculateDamage();
 			other.damage(other, damage);
-			if (other.getCurrentHitpoints() == 0 ){
+			if (other.getCurrentHitpoints() <= 0 ){
+				other.setCurrentHitpoints(0);
 				this.heal();
 				this.collectTreasures(other);
 				other.setIsDead(true);
