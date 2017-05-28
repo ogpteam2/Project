@@ -21,13 +21,18 @@ public class BackpackEnumeration implements Enumeration<Item> {
 	
 	@Override
 	public boolean hasMoreElements() {
-		// TODO Auto-generated method stub
-		return false;
+		return mapIterator.hasNext() || entryIterator.hasNext();
 	}
 
 	@Override
 	public Item nextElement() {
-		if((entryIterator == null || !entryIterator.hasNext()) && mapIterator.hasNext()){
+		boolean entryNext;
+		try{
+			entryNext = entryIterator.hasNext();
+		} catch (NullPointerException e) {
+			entryNext = false;
+		}
+		if(entryNext && mapIterator.hasNext()){
 			currentEntry  = mapIterator.next();
 			entryIterator = currentEntry.getValue().listIterator();
 		}

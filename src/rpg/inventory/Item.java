@@ -19,7 +19,7 @@ abstract public class Item {
 		} else {
 			this.weight = new Weight(BigDecimal.ZERO);
 		}
-		
+		setValue(value);
 	}
 	
 	public Item(Weight weight){
@@ -61,9 +61,19 @@ abstract public class Item {
 	
 	private DucatAmount value;
 	
-	public void setValue(DucatAmount value){
+	@Raw
+	protected DucatAmount getRawValue(){
+		return this.value;
+	}
+	
+	protected void setValue(DucatAmount value){
+		assert canHaveAsValue(value);
 		this.value = value;
 	}
+	
+	protected abstract boolean canHaveAsValue(DucatAmount value);
+	
+	public abstract DucatAmount getValue();
 	
 	/************************************************
 	 * Weight
@@ -97,5 +107,9 @@ abstract public class Item {
 	}
 	
 	public Mobile holder = null;
+	
+	protected void setHolder(Mobile holder){
+		
+	}
 	
 }

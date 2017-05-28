@@ -19,6 +19,10 @@ import be.kuleuven.cs.som.annotate.*;
 @Value
 public class Weight implements Comparable<Weight> {
 	
+	/************************************************
+	 * Constructors
+	 ************************************************/
+	
 	/**
 	 * Initialize the new weight with given numeral and given unit.
 	 * 
@@ -75,6 +79,17 @@ public class Weight implements Comparable<Weight> {
 	}
 	
 	/**
+	 * Initialize a new weight with value zero and unit kg
+	 */
+	public Weight(){
+		this(BigDecimal.ZERO, Unit.kg);
+	}
+	
+	/************************************************
+	 * Value
+	 ************************************************/
+	
+	/**
 	 * Variable referencing a weight of 0.0 kg
 	 */
 	public final static Weight kg_0 = 
@@ -106,6 +121,10 @@ public class Weight implements Comparable<Weight> {
 	 * A variable that references the numeral of this weight.
 	 */
 	private final BigDecimal numeral;
+	
+	/************************************************
+	 * Unit
+	 ************************************************/
 	
 	/**
 	 * Returns the unit of this weight.
@@ -169,6 +188,58 @@ public class Weight implements Comparable<Weight> {
 	 */
 	private final Unit unit;
 	
+	/************************************************
+	 * Utility
+	 ************************************************/
+	
+	/**
+	 * Return the hash code for this weight.
+	 */
+	@Override
+	public int hashCode(){
+		return getNumeral().hashCode() + getUnit().hashCode();
+	}
+	
+	/**
+	 * Return a textual representation of this weight.
+	 * 
+	 * @return A string consisting of the textual representation
+	 * 		   of the numeral of this weight, followed by
+	 * 		   the textual representation of its unit, separated by a space
+	 * 		   and enclosed in square brackets.
+	 * 	       |result.equals("[" + getNumeral().toString() +
+	 * 		   |		 " " + getUnit().toString() + "]")
+	 */
+	@Override
+	public String toString(){
+		return "[" + getNumeral().toString() + " " + getUnit().toString() + "]";
+	}
+	
+	/**
+	 * Return a mathematical context to round the given big decimal to 2 
+	 * fractional digits.
+	 * 
+	 * @param value
+	 * 		  The value to compute a mathematical context for.
+	 * @pre The given value must be effective.
+	 * 		| value != null
+	 * @return The precision of the resulting mathematical context is 
+	 * 		   equal to the precision of the given value diminished with its
+	 * 		   scale and incremented by 2.
+	 *        | result.getPrecision() == value.precision()-value.scale()+2
+	 * @return The resulting mathematical context uses HALF_DOWN as its rounding mode.
+	 *         | result.getRoudingMode == RoundingMode.HALF_DOWN
+	 */
+	@Model
+	static MathContext getContextForScale2(BigDecimal value) {
+		assert value != null;
+		return new MathContext(value.precision()-value.scale()+2,
+				RoundingMode.HALF_DOWN);
+	}
+	
+	/************************************************
+	 * Logic
+	 ************************************************/
 
 	/**
 	 * Compare this capacity amount with another weight.
@@ -237,50 +308,9 @@ public class Weight implements Comparable<Weight> {
 				( this.getUnit() == otherAmount.getUnit()) );
 	}
 	
-	/**
-	 * Return the hash code for this weight.
-	 */
-	@Override
-	public int hashCode(){
-		return getNumeral().hashCode() + getUnit().hashCode();
-	}
-	
-	/**
-	 * Return a textual representation of this weight.
-	 * 
-	 * @return A string consisting of the textual representation
-	 * 		   of the numeral of this weight, followed by
-	 * 		   the textual representation of its unit, separated by a space
-	 * 		   and enclosed in square brackets.
-	 * 	       |result.equals("[" + getNumeral().toString() +
-	 * 		   |		 " " + getUnit().toString() + "]")
-	 */
-	@Override
-	public String toString(){
-		return "[" + getNumeral().toString() + " " + getUnit().toString() + "]";
-	}
-	
-	/**
-	 * Return a mathematical context to round the given big decimal to 2 
-	 * fractional digits.
-	 * 
-	 * @param value
-	 * 		  The value to compute a mathematical context for.
-	 * @pre The given value must be effective.
-	 * 		| value != null
-	 * @return The precision of the resulting mathematical context is 
-	 * 		   equal to the precision of the given value diminished with its
-	 * 		   scale and incremented by 2.
-	 *        | result.getPrecision() == value.precision()-value.scale()+2
-	 * @return The resulting mathematical context uses HALF_DOWN as its rounding mode.
-	 *         | result.getRoudingMode == RoundingMode.HALF_DOWN
-	 */
-	@Model
-	static MathContext getContextForScale2(BigDecimal value) {
-		assert value != null;
-		return new MathContext(value.precision()-value.scale()+2,
-				RoundingMode.HALF_DOWN);
-	}
+	/************************************************
+	 * Arithmetic
+	 ************************************************/
 	
 	/**
 	 * 

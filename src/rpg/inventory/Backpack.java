@@ -23,7 +23,12 @@ public class Backpack extends Container {
 
 	@Override
 	public Weight getWeightOfContents() {
-		
+		BackpackEnumeration it = this.getIterator();
+		Weight total = new Weight();
+		while(it.hasMoreElements()){
+			total.add(it.nextElement().getWeight());
+		}
+		return total;
 	}
 
 	/************************************************
@@ -33,6 +38,15 @@ public class Backpack extends Container {
 	protected IDGenerator getIDGenerator() {
 		return idGenerator;
 	}
+	
+	/************************************************
+	 * Iteration
+	 ************************************************/
+	
+	public BackpackEnumeration getIterator(){
+		BackpackEnumeration it = new BackpackEnumeration(this.getContents());
+		return it;
+	}
 
 	/************************************************
 	 * Contents
@@ -40,8 +54,14 @@ public class Backpack extends Container {
 
 	private HashMap<Long, ArrayList<Item>> contents;
 
+	private HashMap<Long, ArrayList<Item>> getContents(){
+		return this.contents;
+	}
+	
 	public boolean canHaveAsContent(Item item) {
-		return false;
+		if(isOverCapacity(this.getWeight().add(item.getWeight()))){
+			return false;
+		}
 	}
 
 	public void addToContents(Item item) throws InvalidContentException {
@@ -70,7 +90,8 @@ public class Backpack extends Container {
 		return this.capacity;
 	}
 	
-	
-	
+	private boolean isOverCapacity(Weight weight){
+		return this.getCapacity().compareTo(weight)==-1;
+	}
 
 }

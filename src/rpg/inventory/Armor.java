@@ -1,9 +1,5 @@
 package rpg.inventory;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-
 import rpg.utility.IDGenerator;
 import rpg.utility.PrimeGenerator;
 import rpg.value.DucatAmount;
@@ -28,8 +24,7 @@ public class Armor extends Item {
 		assert isValidMaximumProtection(maximumProtection);
 		this.maximumProtection = maximumProtection;
 		
-		assert isValidMaximumValue(maximumValue);
-		this.maximumValue = maximumValue;
+		this.setValue(maximumValue);
 		
 		this.type = type;
 	}
@@ -88,18 +83,12 @@ public class Armor extends Item {
 	 * Value
 	 ****************************************/
 	
-	private final DucatAmount maximumValue;
-	
-	private boolean isValidMaximumValue(DucatAmount maximumValue){
-		return !maximumValue.isGreaterThan(new DucatAmount(1000));
-	}
-	
-	public DucatAmount getMaximumValue(){
-		return this.maximumValue;
+	protected boolean canHaveAsValue(DucatAmount value){
+		return !value.isGreaterThan(new DucatAmount(1000));
 	}
 	
 	public DucatAmount getValue(){
-		return this.getMaximumValue().multiply(this.getProcentualProtection());
+		return this.getRawValue().multiply(this.getProcentualProtection());
 	}
 	
 	
