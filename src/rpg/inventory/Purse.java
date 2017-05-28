@@ -69,6 +69,8 @@ public class Purse extends Container {
 
 	private void tear() {
 		this.torn = true;
+		this.getContainer().addToContents(getDucatContent());
+		this.getContainer().removeFromContents(this);
 	}
 
 	/************************************************
@@ -76,7 +78,7 @@ public class Purse extends Container {
 	 ************************************************/
 
 	public DucatAmount getValue() {
-
+		return this.getDucatContent();
 	}
 
 }

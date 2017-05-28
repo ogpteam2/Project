@@ -95,13 +95,13 @@ abstract public class Item {
 	 * Owner
 	 ************************************************/
 	
-	private Container container = null;
+	private Backpack container = null;
 	
-	public void setContainer(Container container){
+	public void setContainer(Backpack container){
 		this.container = container;
 	}
 	
-	public Container getContainer(){
+	public Backpack getContainer(){
 		return this.container;
 	}
 	
