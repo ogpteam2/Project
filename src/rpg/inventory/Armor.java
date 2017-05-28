@@ -1,16 +1,48 @@
 package rpg.inventory;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
 import rpg.utility.IDGenerator;
 import rpg.utility.PrimeGenerator;
+import rpg.value.DucatAmount;
 import rpg.value.Weight;
 
 public class Armor extends Item {
 	
-	private static PrimeGenerator idGenerator = new PrimeGenerator();
+	private ArmorType type;
 	
-	public Armor(Weight weight){
+	/****************************************
+	 * Constructors
+	 ****************************************/
+	
+	public Armor(Weight weight, 
+			DucatAmount maximumValue, 
+			int maximumProtection, 
+			ArmorType type){
 		super(weight);
+		
+		this.type = type;
+		
+		assert isValidMaximumProtection(maximumProtection);
+		this.maximumProtection = maximumProtection;
+		
+		assert isValidMaximumValue(maximumValue);
+		this.maximumValue = maximumValue;
+		
+		this.type = type;
 	}
+	
+	public Armor(Weight weight, DucatAmount value, int maximumProtection){
+		this(weight, value, maximumProtection, ArmorType.STANDARD);
+	}
+	
+	/****************************************
+	 * Identification
+	 ****************************************/
+	
+	private static PrimeGenerator idGenerator = new PrimeGenerator();
 	
 	protected IDGenerator getIDGenerator(){
 		return idGenerator;
@@ -23,6 +55,52 @@ public class Armor extends Item {
 	private final int maximumProtection;
 	
 	private boolean isValidMaximumProtection(int maximumProtection){
-		
+		return maximumProtection >= 1 
+				&& maximumProtection <= this.type.getMaximumProtection();
 	}
+	
+	public int getMaximumProtection(){
+		return this.maximumProtection;
+	}
+	
+	private int currentProtection;
+	
+	public boolean isValidCurrentProtection(int currentProtection){
+		return (currentProtection <= this.getMaximumProtection() 
+				&& currentProtection >= 0);
+	}
+	
+	public void setCurrentProtection(int currentProtection){
+		assert isValidCurrentProtection(currentProtection);
+		this.currentProtection = currentProtection;
+	}
+	
+	public int getCurrentProtection(){
+		return this.currentProtection;
+	}
+	
+	public double getProcentualProtection(){
+		double procent = (double) this.getCurrentProtection()/this.getMaximumProtection();
+		return procent;
+	}
+	
+	/****************************************
+	 * Value
+	 ****************************************/
+	
+	private final DucatAmount maximumValue;
+	
+	private boolean isValidMaximumValue(DucatAmount maximumValue){
+		return !maximumValue.isGreaterThan(new DucatAmount(1000));
+	}
+	
+	public DucatAmount getMaximumValue(){
+		return this.maximumValue;
+	}
+	
+	public DucatAmount getValue(){
+		return this.getMaximumValue().multiply(this.getProcentualProtection());
+	}
+	
+	
 }

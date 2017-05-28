@@ -1,6 +1,7 @@
 package rpg.value;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import be.kuleuven.cs.som.annotate.Value;
 
@@ -13,7 +14,7 @@ public class DucatAmount implements Comparable<DucatAmount> {
 		if (amount == null)
 			throw new IllegalArgumentException();
 		else
-			this.amount = amount;
+			this.amount = amount.setScale(2, RoundingMode.HALF_EVEN);
 	}
 
 	public DucatAmount() {
@@ -29,6 +30,14 @@ public class DucatAmount implements Comparable<DucatAmount> {
 	}
 
 	private final BigDecimal amount;
+	
+	public String toString() {
+		return (this.getValue().toString() + " ducats");
+	}
+
+	public BigDecimal getValue() {
+		return this.amount;
+	}
 	
 	/******************************************
 	 * Weight
@@ -57,13 +66,6 @@ public class DucatAmount implements Comparable<DucatAmount> {
 	
 	public boolean isGreaterThan(DucatAmount other) throws ClassCastException{
 		return this.compareTo(other) == 1;
-	}
-	public String toString() {
-		return (this.getValue().toString() + "ducats");
-	}
-
-	public BigDecimal getValue() {
-		return this.amount;
 	}
 
 	/******************************************
@@ -104,7 +106,7 @@ public class DucatAmount implements Comparable<DucatAmount> {
 	 */
 	public DucatAmount multiply(BigDecimal factor){
 		BigDecimal result = this.getValue();
-		result.multiply(factor);
+		result = result.multiply(factor);
 		return new DucatAmount(result);
 	}
 	
