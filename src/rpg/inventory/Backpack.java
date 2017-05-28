@@ -6,6 +6,7 @@ import java.util.HashMap;
 import rpg.exception.InvalidContentException;
 import rpg.utility.BinomialGenerator;
 import rpg.utility.IDGenerator;
+import rpg.value.Weight;
 
 public class Backpack extends Container {
 
@@ -15,15 +16,14 @@ public class Backpack extends Container {
 	 * Constructors
 	 ************************************************/
 
-	public Backpack(double weight, double capacity) {
+	public Backpack(Weight weight, Weight capacity) {
 		super(weight);
 		this.capacity = capacity;
 	}
 
 	@Override
-	public double getWeightOfContents() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Weight getWeightOfContents() {
+		
 	}
 
 	/************************************************
@@ -64,10 +64,13 @@ public class Backpack extends Container {
 	 * Capacity
 	 ************************************************/
 
-	private final double capacity;
+	private final Weight capacity;
 
-	public double getCapacity() {
+	public Weight getCapacity() {
 		return this.capacity;
 	}
+	
+	
+	
 
 }

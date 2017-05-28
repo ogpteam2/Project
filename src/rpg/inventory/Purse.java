@@ -8,7 +8,11 @@ import rpg.value.Weight;
 public class Purse extends Container {
 
 	public Purse(Weight weight, DucatAmount contents) {
-
+		super(weight, contents);
+	}
+	
+	public Purse(Weight weight){
+		super(weight);
 	}
 
 	/************************************************
