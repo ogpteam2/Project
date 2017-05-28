@@ -37,6 +37,9 @@ public class HitTest {
 		itemsNormal.put(Anchorpoint.BODY, chestplate);
 		chainmail = new Armor(weight, value, 10, ArmorType.STANDARD);
 		chainmail.setCurrentProtection(7);
+		
+		
+		
 		itemsNormal.put(Anchorpoint.LEFT, chainmail);
 		Jimmie = new Hero("Jimmie", 10L, BigDecimal.valueOf(150), itemsNormal);
 		skin = new Armor(weight, value, 10, ArmorType.STANDARD);

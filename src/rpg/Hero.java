@@ -348,16 +348,23 @@ public class Hero extends Mobile {
 	/**
 	 * Heals the hero for a given amount.
 	 * 
-	 * @effect Heals the hero.
+	 * @effect Heals the hero if heal amount is not greater than current Hitpoints.
 	 * 	      | let random = randomZeroToHundred()/100	
 	 * 		  | difference = this.getMaximumHitpoints() - this.getCurrentHitpoints()
-	 * 	      | setCurrentHitpoints((int)(difference*random))
+	 *        | newHitpoints = (int)(this.getCurrentHitpoints() + (int)(difference*random)
+	 * 	      |  if (newHitpoints<this.getCurrentHitpoints())
+	 * 		  | 		setCurrentHitpoints()
+	 * 
+	 * 
 	 */
 	@Override
 	protected void heal(){
 		double random = randomZeroToHundred()/100;
 		long difference = this.getMaximumHitpoints() - this.getCurrentHitpoints();
-		setCurrentHitpoints((int)(difference*random));
+		int newHitpoints = (int)(this.getCurrentHitpoints() + (int)(difference*random));
+		if (newHitpoints<this.getCurrentHitpoints()){
+			setCurrentHitpoints(newHitpoints);
+		}	
 	}
 	
 	/**
