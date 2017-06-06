@@ -1,2 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_bR2RYDM_Eee2fte5YMl-dw" name="rpg"/>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:PapyrusJava="http://www.eclipse.org/papyrus/PapyrusJava/1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <uml:Model xmi:id="_bR2RYDM_Eee2fte5YMl-dw" name="rpg">
+    <packagedElement xmi:type="uml:Package" xmi:id="_a8kB8Eq5Eee5ou8Y8Ny5aw" name="Project">
+      <packagedElement xmi:type="uml:Package" xmi:id="_bIgMMEq5Eee5ou8Y8Ny5aw" name="rpg">
+        <packagedElement xmi:type="uml:Class" xmi:id="_bTy2MEq5Eee5ou8Y8Ny5aw" name="BigDecimal"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_bUTzkEq5Eee5ou8Y8Ny5aw" name="IllegalArgumentException"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_bV5vAEq5Eee5ou8Y8Ny5aw" name="Weight"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_bXitwEq5Eee5ou8Y8Ny5aw" name="Unit"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_ba8AAUq5Eee5ou8Y8Ny5aw" name="Pattern"/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_bIovEEq5Eee5ou8Y8Ny5aw" name="java">
+      <packagedElement xmi:type="uml:Package" xmi:id="_bIryYEq5Eee5ou8Y8Ny5aw" name="java">
+        <packagedElement xmi:type="uml:Package" xmi:id="_bIuOoEq5Eee5ou8Y8Ny5aw" name="lang">
+          <packagedElement xmi:type="uml:Class" xmi:id="_bIwD0Eq5Eee5ou8Y8Ny5aw" name="String"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_bZjf8Eq5Eee5ou8Y8Ny5aw" name="Object"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_bXK6UEq5Eee5ou8Y8Ny5aw" name="util">
+          <packagedElement xmi:type="uml:Class" xmi:id="_bXLhYEq5Eee5ou8Y8Ny5aw" name="EnumMap"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_bbYE4Eq5Eee5ou8Y8Ny5aw" name="Map"/>
+          <packagedElement xmi:type="uml:Package" xmi:id="_bdDf4Uq5Eee5ou8Y8Ny5aw" name="regex">
+            <packagedElement xmi:type="uml:Class" xmi:id="_bdEG8Eq5Eee5ou8Y8Ny5aw" name="Pattern"/>
+          </packagedElement>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_baOOUEq5Eee5ou8Y8Ny5aw" name="math">
+          <packagedElement xmi:type="uml:Class" xmi:id="_baQqkEq5Eee5ou8Y8Ny5aw" name="BigDecimal"/>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_bPou8Eq5Eee5ou8Y8Ny5aw" name="importedTypes">
+      <packagedElement xmi:type="uml:Package" xmi:id="_bPu1kEq5Eee5ou8Y8Ny5aw" name="rpg">
+        <packagedElement xmi:type="uml:Package" xmi:id="_bPxR0Eq5Eee5ou8Y8Ny5aw" name="exception">
+          <packagedElement xmi:type="uml:Class" xmi:id="_bP0VIEq5Eee5ou8Y8Ny5aw" name="InvalidContentException"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_bQrQwEq5Eee5ou8Y8Ny5aw" name="inventory">
+          <packagedElement xmi:type="uml:Class" xmi:id="_bQse4Eq5Eee5ou8Y8Ny5aw" name="Armor"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_bWoHwEq5Eee5ou8Y8Ny5aw" name="Anchorpoint"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_bWzt8Eq5Eee5ou8Y8Ny5aw" name="Item"/>
+          <packagedElement xmi:type="uml:Class" xmi:id="_bcPnkEq5Eee5ou8Y8Ny5aw" name="Weapon"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_bUqY4Eq5Eee5ou8Y8Ny5aw" name="utility">
+          <packagedElement xmi:type="uml:Class" xmi:id="_bUrnAEq5Eee5ou8Y8Ny5aw" name="PrimeGenerator"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Package" xmi:id="_bbR-QEq5Eee5ou8Y8Ny5aw" name="value">
+          <packagedElement xmi:type="uml:Class" xmi:id="_bbTMYEq5Eee5ou8Y8Ny5aw" name="Weight"/>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_kx8ysEq5Eee5ou8Y8Ny5aw" name="generated"/>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bFxBQEq5Eee5ou8Y8Ny5aw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bF0EkEq5Eee5ou8Y8Ny5aw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/PapyrusJava/1#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://PapyrusJava_PROFILES/PapyrusJava.profile.uml#_j9REUByGEduN1bTiWJ0lyw"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bGlgoEq5Eee5ou8Y8Ny5aw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bGnV0Eq5Eee5ou8Y8Ny5aw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/Codegen/1#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://Codegen_PROFILES/Codegen.profile.uml#_fPDsIBa-EearhdjjJ6cVzQ"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_bHUgcEq5Eee5ou8Y8Ny5aw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bHW8sEq5Eee5ou8Y8Ny5aw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
+    </profileApplication>
+  </uml:Model>
+  <PapyrusJava:External xmi:id="_bPSwsEq5Eee5ou8Y8Ny5aw" name="java.lang.String" base_Classifier="_bIwD0Eq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bP9fEEq5Eee5ou8Y8Ny5aw" name="rpg.exception.InvalidContentException" base_Classifier="_bP0VIEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bQzzoEq5Eee5ou8Y8Ny5aw" name="rpg.inventory.Armor" base_Classifier="_bQse4Eq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bT3HoEq5Eee5ou8Y8Ny5aw" name="BigDecimal" base_Classifier="_bTy2MEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bUYFAEq5Eee5ou8Y8Ny5aw" name="IllegalArgumentException" base_Classifier="_bUTzkEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bUxGkEq5Eee5ou8Y8Ny5aw" name="rpg.utility.PrimeGenerator" base_Classifier="_bUrnAEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bV-AcEq5Eee5ou8Y8Ny5aw" name="Weight" base_Classifier="_bV5vAEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bWuOYEq5Eee5ou8Y8Ny5aw" name="rpg.inventory.Anchorpoint" base_Classifier="_bWoHwEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bW3YUEq5Eee5ou8Y8Ny5aw" name="rpg.inventory.Item" base_Classifier="_bWzt8Eq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bXPy0Eq5Eee5ou8Y8Ny5aw" name="java.util.EnumMap" base_Classifier="_bXLhYEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bXm_MEq5Eee5ou8Y8Ny5aw" name="Unit" base_Classifier="_bXitwEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bZmjQEq5Eee5ou8Y8Ny5aw" name="java.lang.Object" base_Classifier="_bZjf8Eq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_baWxMEq5Eee5ou8Y8Ny5aw" name="java.math.BigDecimal" base_Classifier="_baQqkEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_ba-cQEq5Eee5ou8Y8Ny5aw" name="Pattern" base_Classifier="_ba8AAUq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bbVooEq5Eee5ou8Y8Ny5aw" name="rpg.value.Weight" base_Classifier="_bbTMYEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bbZ6EEq5Eee5ou8Y8Ny5aw" name="java.util.Map" base_Classifier="_bbYE4Eq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bcSD0Eq5Eee5ou8Y8Ny5aw" name="rpg.inventory.Weapon" base_Classifier="_bcPnkEq5Eee5ou8Y8Ny5aw"/>
+  <PapyrusJava:External xmi:id="_bdGjMEq5Eee5ou8Y8Ny5aw" name="java.util.regex.Pattern" base_Classifier="_bdEG8Eq5Eee5ou8Y8Ny5aw"/>
+</xmi:XMI>
