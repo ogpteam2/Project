@@ -5,6 +5,11 @@ import rpg.utility.WeaponIDGenerator;
 import rpg.value.DucatAmount;
 import rpg.value.Weight;
 
+/**
+ * A class of weapons.
+ * @author Elias, Robbe
+ *
+ */
 public class Weapon extends Item {
 
 	private static WeaponIDGenerator idGenerator = new WeaponIDGenerator();

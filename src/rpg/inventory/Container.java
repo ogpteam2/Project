@@ -5,6 +5,12 @@ import be.kuleuven.cs.som.annotate.Raw;
 import rpg.value.DucatAmount;
 import rpg.value.Weight;
 
+/**
+ * An abstract class for types items that can contain things. 
+ * @author Elias, Robbe
+ *
+ */
+
 public abstract class Container extends Item{
 
 	public Container(Weight weight, DucatAmount ducatContent) {

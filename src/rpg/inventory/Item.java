@@ -9,6 +9,12 @@ import rpg.utility.IDGenerator;
 import rpg.value.DucatAmount;
 import rpg.value.Weight;
 
+/**
+ * Abstract class of items.
+ * @author Robbe, Elias
+ *
+ */
+
 abstract public class Item {
 	
 	public Item(Weight weight, DucatAmount value){
